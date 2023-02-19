@@ -9,12 +9,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import util.GameObject;
+import util.Platform;
 
 
 /*
@@ -45,6 +47,14 @@ SOFTWARE.
  */ 
 public class Viewer extends JPanel {
 	private long CurrentAnimationTime= 0; 
+	private final int SCREEN_WIDTH = 800;
+	private final int SCREEN_HEIGHT = 600;
+	private final int LEVEL_WIDTH = 1920;
+	private final int LEVEL_HEIGHT = 600;
+	private final int BACKGROUND_SPEED = 3;
+	
+	private int backgroundPosition;
+	private int cameraPosition;
 	
 	Model gameworld =new Model(); 
 	 
@@ -69,10 +79,11 @@ public class Viewer extends JPanel {
 	}
 
 	public void updateview() {
-		
+		cameraPosition = (int) (gameworld.getPlayer().getCentre().getX() - (SCREEN_WIDTH / 8));
+		//cameraPosition = (int) Math.min(gameworld.getPlayer().getCentre().getX() - (SCREEN_WIDTH / 8), LEVEL_WIDTH - SCREEN_WIDTH);
+		backgroundPosition = (cameraPosition / BACKGROUND_SPEED) % LEVEL_WIDTH;
 		this.repaint();
-		// TODO Auto-generated method stub
-		
+
 	}
 	
 	
@@ -92,9 +103,18 @@ public class Viewer extends JPanel {
 		//Draw background 
 		drawBackground(g);
 		
+		//Draw ground
+		gameworld.getGround().draw(g);
+		/*
+		//Draw platforms
+		List<Platform> platforms = gameworld.getPlatforms();
+		for(Platform platform : platforms) {
+			platform.draw(g);
+		}
+		*/
 		//Draw player
 		drawPlayer(x, y, width, height, texture,g);
-		  
+		
 		//Draw Bullets 
 		// change back 
 		gameworld.getBullets().forEach((temp) -> 
@@ -128,10 +148,12 @@ public class Viewer extends JPanel {
 
 	private void drawBackground(Graphics g)
 	{
-		File TextureToLoad = new File("res/spacebackground.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
+		File TextureToLoad = new File("res/misty_background.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
 		try {
 			Image myImage = ImageIO.read(TextureToLoad); 
-			 g.drawImage(myImage, 0,0, 1000, 1000, 0 , 0, 1000, 1000, null); 
+			 //g.drawImage(myImage, 0,0, 1000, 1000, 0 , 0, 1000, 1000, null); 
+			g.drawImage(myImage, -cameraPosition, 0, null);
+			//g.drawImage(myImage, 0, 0, 800, 600, null); 
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -161,7 +183,8 @@ public class Viewer extends JPanel {
 			//The spirte is 32x32 pixel wide and 4 of them are placed together so we need to grab a different one each time 
 			//remember your training :-) computer science everything starts at 0 so 32 pixels gets us to 31  
 			int currentPositionInAnimation= ((int) ((CurrentAnimationTime%40)/10))*32; //slows down animation so every 10 frames we get another frame so every 100ms 
-			g.drawImage(myImage, x,y, x+width, y+height, currentPositionInAnimation  , 0, currentPositionInAnimation+31, 32, null); 
+			//g.drawImage(myImage, x,y, x+width, y+height, currentPositionInAnimation  , 0, currentPositionInAnimation+31, 32, null); 
+			g.drawImage(myImage, x, y, width, height, this);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -173,8 +196,7 @@ public class Viewer extends JPanel {
 		// Bullets from https://opengameart.org/forumtopic/tatermands-art 
 		// background image from https://www.needpix.com/photo/download/677346/space-stars-nebula-background-galaxy-universe-free-pictures-free-photos-free-images
 		
-	}
-		 
+	}		 
 	 
 
 }

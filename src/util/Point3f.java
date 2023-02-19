@@ -104,6 +104,10 @@ public class Point3f {
 		return f;
 	}
 
+	public int getBoundary() {
+		return boundary;
+	}
+	
 	public float getX() {
 		return x;
 	}

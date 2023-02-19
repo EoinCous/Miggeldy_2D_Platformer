@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -54,43 +56,49 @@ public class MainWindow {
 	 private   JLabel BackgroundImageForStartMenu ;
 	  
 	public MainWindow() {
-	        frame.setSize(1000, 1000);  // you can customise this later and adapt it to change on size.  
-	      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //If exit // you can modify with your way of quitting , just is a template.
-	        frame.setLayout(null);
-	        frame.add(canvas);  
-	        canvas.setBounds(0, 0, 1000, 1000); 
-			   canvas.setBackground(new Color(255,255,255)); //white background  replaced by Space background but if you remove the background method this will draw a white screen 
-		      canvas.setVisible(false);   // this will become visible after you press the key. 
+	    frame.setSize(800, 600);  // you can customise this later and adapt it to change on size. 
+	    frame.setResizable(false);
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //If exit // you can modify with your way of quitting , just is a template.
+	    frame.setLayout(null); 
+	    frame.add(canvas);  
+	    canvas.setBounds(0, 0, frame.getWidth(), frame.getHeight()); 
+		canvas.setBackground(new Color(255,255,255)); //white background  replaced by Space background but if you remove the background method this will draw a white screen 
+	    canvas.setVisible(false);   // this will become visible after you press the key. 
 		          
 		       
-	        JButton startMenuButton = new JButton("Start Game");  // start button 
-	        startMenuButton.addActionListener(new ActionListener()
-	           { 
-				@Override
-				public void actionPerformed(ActionEvent e) { 
-					startMenuButton.setVisible(false);
-					BackgroundImageForStartMenu.setVisible(false); 
-					canvas.setVisible(true); 
-					canvas.addKeyListener(Controller);    //adding the controller to the Canvas  
-	            canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .
-					startGame=true;
-				}});  
-	        startMenuButton.setBounds(400, 500, 200, 40); 
-	        
-	        //loading background image 
-	        File BackroundToLoad = new File("res/startscreen.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
-			try {
-				 
-				 BufferedImage myPicture = ImageIO.read(BackroundToLoad);
-				 BackgroundImageForStartMenu = new JLabel(new ImageIcon(myPicture));
-				 BackgroundImageForStartMenu.setBounds(0, 0, 1000, 1000);
-				frame.add(BackgroundImageForStartMenu); 
-			}  catch (IOException e) { 
-				e.printStackTrace();
-			}   
+        JButton startMenuButton = new JButton("Start Game");  // start button 
+        startMenuButton.addActionListener(new ActionListener()
+           { 
+			@Override
+			public void actionPerformed(ActionEvent e) { 
+				startMenuButton.setVisible(false);
+				BackgroundImageForStartMenu.setVisible(false); 
+				canvas.setVisible(true); 
+				canvas.addKeyListener(Controller);    //adding the controller to the Canvas  
+				canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .
+				startGame=true;
+			}});  
+        int buttonWidth = 40;
+        startMenuButton.setBounds(frame.getWidth()/2 - (buttonWidth*2), frame.getHeight()/2, 200, buttonWidth); 
+        
+        //loading background image 
+        File BackgroundToLoad = new File("res/Miggeldy_Menu.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
+		
+        try {
 			 
-	         frame.add(startMenuButton);  
-	       frame.setVisible(true);   
+			 BufferedImage myPicture = ImageIO.read(BackgroundToLoad);
+			 ImageIcon imageIcon = new ImageIcon(myPicture);
+			 BackgroundImageForStartMenu = new JLabel(imageIcon);
+			 BackgroundImageForStartMenu.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+			 frame.add(BackgroundImageForStartMenu);
+			
+		}  catch (IOException e) { 
+			e.printStackTrace();
+		}   
+		
+		 
+		frame.add(startMenuButton);  
+        frame.setVisible(true);   
 	}
 
 	public static void main(String[] args) {
@@ -127,9 +135,9 @@ public class MainWindow {
 		
 		// model update   
 		gameworld.gamelogic();
-		// view update 
 		
-		  canvas.updateview(); 
+		// view update 
+		canvas.updateview(); 
 		
 		// Both these calls could be setup as  a thread but we want to simplify the game logic for you.  
 		//score update  

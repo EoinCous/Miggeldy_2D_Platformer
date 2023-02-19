@@ -1,10 +1,15 @@
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import util.CharacterObject;
 import util.GameObject;
 import util.Point3f;
-import util.Vector3f; 
+import util.Vector3f;
+import util.Ground;
+import util.Platform;
 /*
  * Created by Abraham Campbell on 15/01/2020.
  *   Copyright (c) 2020  Abraham Campbell
@@ -31,23 +36,34 @@ SOFTWARE.
  */ 
 public class Model {
 	
-	 private  GameObject Player;
+	 private GameObject Player;
+	 private CharacterObject MainPlayer;
 	 private Controller controller = Controller.getInstance();
-	 private  CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
-	 private  CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
+	 private CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
+	 private CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
+	 private Ground ground;
+	 private List<Platform> platforms;
 	 private int Score=0; 
 
 	public Model() {
-		 //setup game world 
+		//setup game world 
+		ground = new Ground(0, 450, 1920, 400, Color.GRAY);
+		platforms = new ArrayList<>();
+		platforms.add(new Platform(0, 400, 800, 50, Color.black));
+		platforms.add(new Platform(300, 350, 200, 50, Color.red));
+		platforms.add(new Platform(100, 300, 200, 50, Color.blue));
+		platforms.add(new Platform(500, 100, 200, 50, Color.blue));
 		//Player 
-		Player= new GameObject("res/Lightning.png",50,50,new Point3f(500,500,0));
+		Player = new GameObject("res/Miggeldy_On_Bike_T.png",50,50,new Point3f(400,ground.getY()-50,0));
+		//Player = new GameObject("res/Miggeldy_On_Bike_T.png",50,50,new Point3f(400,50,0));
+		
+		/*
 		//Enemies  starting with four 
-		
-		EnemiesList.add(new GameObject("res/UFO.png",50,50,new Point3f(((float)Math.random()*50+400 ),0,0))); 
-		EnemiesList.add(new GameObject("res/UFO.png",50,50,new Point3f(((float)Math.random()*50+500 ),0,0)));
-		EnemiesList.add(new GameObject("res/UFO.png",50,50,new Point3f(((float)Math.random()*100+500 ),0,0)));
-		EnemiesList.add(new GameObject("res/UFO.png",50,50,new Point3f(((float)Math.random()*100+400 ),0,0)));
-		
+		EnemiesList.add(new GameObject("res/canada_goose_logo.png",50,50,new Point3f(((float)Math.random()*50+400 ),0,0))); 
+		EnemiesList.add(new GameObject("res/canada_goose_logo.png",50,50,new Point3f(((float)Math.random()*50+500 ),0,0)));
+		EnemiesList.add(new GameObject("res/canada_goose_logo.png",50,50,new Point3f(((float)Math.random()*100+500 ),0,0)));
+		EnemiesList.add(new GameObject("res/canada_goose_logo.png",50,50,new Point3f(((float)Math.random()*100+400 ),0,0)));
+		*/
 		
 	    
 	}
@@ -58,7 +74,7 @@ public class Model {
 		// Player Logic first 
 		playerLogic(); 
 		// Enemy Logic next
-		enemyLogic();
+		//enemyLogic();
 		// Bullets move next 
 		bulletLogic();
 		// interactions between objects 
@@ -76,16 +92,16 @@ public class Model {
 		// using enhanced for-loop style as it makes it alot easier both code wise and reading wise too 
 		for (GameObject temp : EnemiesList) 
 		{
-		for (GameObject Bullet : BulletList) 
-		{
-			if ( Math.abs(temp.getCentre().getX()- Bullet.getCentre().getX())< temp.getWidth() 
-				&& Math.abs(temp.getCentre().getY()- Bullet.getCentre().getY()) < temp.getHeight())
+			for (GameObject Bullet : BulletList) 
 			{
-				EnemiesList.remove(temp);
-				BulletList.remove(Bullet);
-				Score++;
-			}  
-		}
+				if ( Math.abs(temp.getCentre().getX()- Bullet.getCentre().getX())< temp.getWidth() 
+					&& Math.abs(temp.getCentre().getY()- Bullet.getCentre().getY()) < temp.getHeight())
+				{
+					EnemiesList.remove(temp);
+					BulletList.remove(Bullet);
+					Score++;
+				}  
+			}
 		}
 		
 	}
@@ -113,7 +129,7 @@ public class Model {
 		{
 			while (EnemiesList.size()<6)
 			{
-				EnemiesList.add(new GameObject("res/UFO.png",50,50,new Point3f(((float)Math.random()*1000),0,0))); 
+				EnemiesList.add(new GameObject("res/canada_goose_logo.png",50,50,new Point3f(((float)Math.random()*1000),0,0))); 
 			}
 		}
 	}
@@ -143,20 +159,49 @@ public class Model {
 		// smoother animation is possible if we make a target position  // done but may try to change things for students  
 		 
 		//check for movement and if you fired a bullet 
-		  
-if(Controller.getInstance().isKeyAPressed()){Player.getCentre().ApplyVector( new Vector3f(-2,0,0)); }
 		
-		if(Controller.getInstance().isKeyDPressed())
-		{
-			Player.getCentre().ApplyVector( new Vector3f(2,0,0));
+		
+		//Ground Gravity
+		if(Player.getCentre().getY() < ground.getY()-50 && !Controller.getInstance().isKeyWPressed()) {
+			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
 		}
+		/*
+		//Platform Gravity
+		if(Player.getCentre().getY() < platforms.get(0).getRect().y-50 && !Controller.getInstance().isKeyWPressed()) {
+			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
+		}*/
+		
+		//Move left
+		if(Controller.getInstance().isKeyAPressed()){Player.getCentre().ApplyVector( new Vector3f(-2,0,0)); }
+		
+		//Move right
+		if(Controller.getInstance().isKeyDPressed()){Player.getCentre().ApplyVector( new Vector3f(2,0,0)); }
 			
+		//Jump and return to ground
+		
 		if(Controller.getInstance().isKeyWPressed())
 		{
 			Player.getCentre().ApplyVector( new Vector3f(0,2,0));
-		}
+		}/*
+		if (Controller.getInstance().isKeyWPressed()) {
+			MainPlayer.getCentre().setY(-MainPlayer.getGravity());
+			MainPlayer.setGravity(MainPlayer.getGravity()-1);
+			if(MainPlayer.getGravity() <= 0) {
+				MainPlayer.setJumping(false);
+				MainPlayer.setGravity(5);
+			}
+        } else {
+            // Otherwise, move the player downwards until they reach the ground
+            if (MainPlayer.getCentre().getY() < MainPlayer.getCentre().getBoundary() - MainPlayer.getHeight()) {
+            	MainPlayer.getCentre().setY(+MainPlayer.getGravity());
+            	MainPlayer.setGravity(MainPlayer.getGravity()+1);
+            } else {
+            	MainPlayer.setGravity(5);
+            }
+        }*/
 		
-		if(Controller.getInstance().isKeySPressed()){Player.getCentre().ApplyVector( new Vector3f(0,-2,0));}
+		
+		//if(Controller.getInstance().isKeySPressed()){Player.getCentre().ApplyVector( new Vector3f(0,-2,0));}
 		
 		if(Controller.getInstance().isKeySpacePressed())
 		{
@@ -167,12 +212,20 @@ if(Controller.getInstance().isKeyAPressed()){Player.getCentre().ApplyVector( new
 	}
 
 	private void CreateBullet() {
-		BulletList.add(new GameObject("res/Bullet.png",32,64,new Point3f(Player.getCentre().getX(),Player.getCentre().getY(),0.0f)));
+		BulletList.add(new GameObject("res/Guinness_transparent.png",32,64,new Point3f(Player.getCentre().getX(),Player.getCentre().getY(),0.0f)));
 		
 	}
 
 	public GameObject getPlayer() {
 		return Player;
+	}
+	
+	public Ground getGround() {
+		return ground;
+	}
+	
+	public List<Platform> getPlatforms(){
+		return platforms;
 	}
 
 	public CopyOnWriteArrayList<GameObject> getEnemies() {
