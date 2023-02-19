@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import util.CharacterObject;
 import util.GameObject;
 import util.Point3f;
 import util.Vector3f;
@@ -36,7 +35,6 @@ SOFTWARE.
 public class Model {
 	
 	 private GameObject Player;
-	 private CharacterObject MainPlayer;
 	 private Controller controller = Controller.getInstance();
 	 private CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
 	 private CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
@@ -79,7 +77,7 @@ public class Model {
 		// Enemy Logic next
 		//enemyLogic();
 		// Bullets move next 
-		bulletLogic();
+		//bulletLogic();
 		// interactions between objects 
 		gameLogic(); 
 	   
@@ -163,9 +161,13 @@ public class Model {
 		 
 		//check for movement and if you fired a bullet 
 		
-		
-		//Platform Gravity
+		/*
+		//Gravity using first ground platform
 		if(Player.getCentre().getY() < grounds.get(0).getRect().y-50 && !Controller.getInstance().isKeyWPressed()) {
+			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
+		}*/
+		//Platform Gravity
+		if(Player.getCentre().getY() < getGroundY()-50 && !Controller.getInstance().isKeyWPressed()) {
 			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
 		}
 		
@@ -175,30 +177,10 @@ public class Model {
 		//Move right
 		if(Controller.getInstance().isKeyDPressed()){Player.getCentre().ApplyVector( new Vector3f(2,0,0)); }
 			
-		//Jump and return to ground
+		//Jump
+		if(Controller.getInstance().isKeyWPressed()){Player.getCentre().ApplyVector( new Vector3f(0,5,0));	}		
 		
-		if(Controller.getInstance().isKeyWPressed())
-		{
-			Player.getCentre().ApplyVector( new Vector3f(0,2,0));
-		}/*
-		if (Controller.getInstance().isKeyWPressed()) {
-			MainPlayer.getCentre().setY(-MainPlayer.getGravity());
-			MainPlayer.setGravity(MainPlayer.getGravity()-1);
-			if(MainPlayer.getGravity() <= 0) {
-				MainPlayer.setJumping(false);
-				MainPlayer.setGravity(5);
-			}
-        } else {
-            // Otherwise, move the player downwards until they reach the ground
-            if (MainPlayer.getCentre().getY() < MainPlayer.getCentre().getBoundary() - MainPlayer.getHeight()) {
-            	MainPlayer.getCentre().setY(+MainPlayer.getGravity());
-            	MainPlayer.setGravity(MainPlayer.getGravity()+1);
-            } else {
-            	MainPlayer.setGravity(5);
-            }
-        }*/
-		
-		
+		//Move Down
 		//if(Controller.getInstance().isKeySPressed()){Player.getCentre().ApplyVector( new Vector3f(0,-2,0));}
 		
 		if(Controller.getInstance().isKeySpacePressed())
@@ -211,7 +193,6 @@ public class Model {
 
 	private void CreateBullet() {
 		BulletList.add(new GameObject("res/Guinness_transparent.png",32,64,new Point3f(Player.getCentre().getX(),Player.getCentre().getY(),0.0f)));
-		
 	}
 
 	public GameObject getPlayer() {
@@ -224,6 +205,17 @@ public class Model {
 	
 	public List<Platform> getGrounds(){
 		return grounds;
+	}
+	
+	//Find what platform the player is at and return the height of the platform
+	public int getGroundY() {
+		for (Platform ground : grounds) {
+	        if (Player.getCentre().getX() + Player.getWidth() > ground.getRect().x
+	                && Player.getCentre().getX() < ground.getRect().x + ground.getRect().width) {
+	            return ground.getRect().y;
+	        }
+	    }
+		return 0;
 	}
 
 	public CopyOnWriteArrayList<GameObject> getEnemies() {

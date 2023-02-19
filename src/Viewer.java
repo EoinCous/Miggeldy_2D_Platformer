@@ -109,12 +109,13 @@ public class Viewer extends JPanel {
 		for(Platform ground : grounds) {
 			ground.draw(g);
 		}
-				
+		
+		/*
 		//Draw platforms
 		List<Platform> platforms = gameworld.getPlatforms();
 		for(Platform platform : platforms) {
 			platform.draw(g);
-		}
+		}*/
 	
 		//Draw player
 		drawPlayer(x, y, width, height, texture,g);

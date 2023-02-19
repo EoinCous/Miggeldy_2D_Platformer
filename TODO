@@ -1,6 +1,5 @@
-Upload version of ground to Git repo
-Delete ground and only use platforms (upload to repo)
-Create a list of platforms for the ground which the gravity will always be set to
+Move the camera as the player progresses through level
+Change the gravity to whatever platform.y the player is above
 Create a list of platforms which are above the ground. Gravity will change to the platforms once player is above
-Store powerups across the level which changes the players animation and speed / jump height
+Store power-ups across the level which changes the players animation and speed / jump height
 Player can die and reset to the start if falls down through hole
