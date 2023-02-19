@@ -8,7 +8,6 @@ import util.CharacterObject;
 import util.GameObject;
 import util.Point3f;
 import util.Vector3f;
-import util.Ground;
 import util.Platform;
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -41,21 +40,25 @@ public class Model {
 	 private Controller controller = Controller.getInstance();
 	 private CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
 	 private CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
-	 private Ground ground;
 	 private List<Platform> platforms;
+	 private List<Platform> grounds;
 	 private int Score=0; 
 
 	public Model() {
 		//setup game world 
-		ground = new Ground(0, 450, 1920, 400, Color.GRAY);
+		grounds = new ArrayList<>();
+		grounds.add(new Platform(0, 500, 500, 100, Color.black));
+		grounds.add(new Platform(500, 450, 200, 150, Color.black));
+		grounds.add(new Platform(700, 400, 200, 200, Color.black));
+		grounds.add(new Platform(900, 500, 1100, 100, Color.black));
+		
 		platforms = new ArrayList<>();
-		platforms.add(new Platform(0, 400, 800, 50, Color.black));
-		platforms.add(new Platform(300, 350, 200, 50, Color.red));
-		platforms.add(new Platform(100, 300, 200, 50, Color.blue));
-		platforms.add(new Platform(500, 100, 200, 50, Color.blue));
+		platforms.add(new Platform(300, 250, 100, 50, Color.red));
+		platforms.add(new Platform(600, 350, 100, 50, Color.red));
+		platforms.add(new Platform(900, 300, 100, 50, Color.red));
+		platforms.add(new Platform(1200, 100, 100, 50, Color.red));
 		//Player 
-		Player = new GameObject("res/Miggeldy_On_Bike_T.png",50,50,new Point3f(400,ground.getY()-50,0));
-		//Player = new GameObject("res/Miggeldy_On_Bike_T.png",50,50,new Point3f(400,50,0));
+		Player = new GameObject("res/Miggeldy_On_Bike_T.png",50,50,new Point3f(100,300,0));
 		
 		/*
 		//Enemies  starting with four 
@@ -161,15 +164,10 @@ public class Model {
 		//check for movement and if you fired a bullet 
 		
 		
-		//Ground Gravity
-		if(Player.getCentre().getY() < ground.getY()-50 && !Controller.getInstance().isKeyWPressed()) {
+		//Platform Gravity
+		if(Player.getCentre().getY() < grounds.get(0).getRect().y-50 && !Controller.getInstance().isKeyWPressed()) {
 			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
 		}
-		/*
-		//Platform Gravity
-		if(Player.getCentre().getY() < platforms.get(0).getRect().y-50 && !Controller.getInstance().isKeyWPressed()) {
-			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
-		}*/
 		
 		//Move left
 		if(Controller.getInstance().isKeyAPressed()){Player.getCentre().ApplyVector( new Vector3f(-2,0,0)); }
@@ -220,12 +218,12 @@ public class Model {
 		return Player;
 	}
 	
-	public Ground getGround() {
-		return ground;
-	}
-	
 	public List<Platform> getPlatforms(){
 		return platforms;
+	}
+	
+	public List<Platform> getGrounds(){
+		return grounds;
 	}
 
 	public CopyOnWriteArrayList<GameObject> getEnemies() {

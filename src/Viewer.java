@@ -78,6 +78,7 @@ public class Viewer extends JPanel {
 		// TODO Auto-generated constructor stub
 	}
 
+	//TODO: Fix method
 	public void updateview() {
 		cameraPosition = (int) (gameworld.getPlayer().getCentre().getX() - (SCREEN_WIDTH / 8));
 		//cameraPosition = (int) Math.min(gameworld.getPlayer().getCentre().getX() - (SCREEN_WIDTH / 8), LEVEL_WIDTH - SCREEN_WIDTH);
@@ -103,15 +104,18 @@ public class Viewer extends JPanel {
 		//Draw background 
 		drawBackground(g);
 		
-		//Draw ground
-		gameworld.getGround().draw(g);
-		/*
+		//Draw platforms
+		List<Platform> grounds = gameworld.getGrounds();
+		for(Platform ground : grounds) {
+			ground.draw(g);
+		}
+				
 		//Draw platforms
 		List<Platform> platforms = gameworld.getPlatforms();
 		for(Platform platform : platforms) {
 			platform.draw(g);
 		}
-		*/
+	
 		//Draw player
 		drawPlayer(x, y, width, height, texture,g);
 		
