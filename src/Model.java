@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -41,6 +42,8 @@ public class Model {
 	 private List<Platform> platforms;
 	 private List<Platform> grounds;
 	 private int Score=0; 
+	 private final int playerWidth = 50;
+	 private final int playerHeight = 50;
 
 	public Model() {
 		//setup game world 
@@ -56,7 +59,7 @@ public class Model {
 		platforms.add(new Platform(900, 300, 100, 50, Color.red));
 		platforms.add(new Platform(1200, 100, 100, 50, Color.red));
 		//Player 
-		Player = new GameObject("res/Miggeldy_On_Bike_T.png",50,50,new Point3f(100,300,0));
+		Player = new GameObject("res/Miggeldy_On_Bike_T.png",playerWidth,playerHeight,new Point3f(100,300,0));
 		
 		/*
 		//Enemies  starting with four 
@@ -115,6 +118,7 @@ public class Model {
 			//System.out.println(ground.getX());
 			ground.setX(-(int) Player.getCentre().getX());
 		}
+		
 	}
 
 	private void enemyLogic() {
@@ -171,14 +175,8 @@ public class Model {
 		 
 		//check for movement and if you fired a bullet 
 		
-		/*
-		//Gravity using first ground platform
-		if(Player.getCentre().getY() < grounds.get(0).getRect().y-50 && !Controller.getInstance().isKeyWPressed()) {
-			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
-		}*/
-		
-		//Platform Gravity
-		if(Player.getCentre().getY() < getGroundY()-50 && !Controller.getInstance().isKeyWPressed()) {
+		//Collision detection gravity
+		if(!isOnPlatform((int)Player.getCentre().getX(), (int)Player.getCentre().getY()) && !Controller.getInstance().isKeyWPressed()) {
 			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
 		}
 		
@@ -218,15 +216,16 @@ public class Model {
 		return grounds;
 	}
 	
-	//Find what platform the player is at and return the height of the platform
-	public int getGroundY() {
-		for (Platform ground : grounds) {
-	        if (Player.getCentre().getX() + Player.getWidth() > ground.getRect().x
-	                && Player.getCentre().getX() < ground.getRect().x + ground.getRect().width) {
-	            return ground.getRect().y;
+	private boolean isOnPlatform(int x, int y) {
+	    // loop through each platform and check for collisions
+	    for (Platform platform : grounds) {
+	        Rectangle playerBounds = new Rectangle(x, y, playerWidth, playerHeight);
+	        Rectangle platformBounds = platform.getBounds();
+	        if (playerBounds.intersects(platformBounds)) {
+	            return true;
 	        }
 	    }
-		return 0;
+	    return false;
 	}
 
 	public CopyOnWriteArrayList<GameObject> getEnemies() {

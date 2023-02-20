@@ -8,9 +8,15 @@ public class Platform {
 	private Rectangle rect;
 	private Color color;
 	private int xPos;
+	private int y;
+	private int width;
+	private int height;
 	
 	public Platform(int x, int y, int width, int height, Color color) {
 		this.xPos = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
 		rect = new Rectangle(xPos, y, width, height);
 		this.color = color;
 	}
@@ -35,6 +41,10 @@ public class Platform {
 	
 	public int getX() {
 		return xPos;
+	}
+	
+	public Rectangle getBounds() {
+		return new Rectangle(xPos, y, width, height);
 	}
 
 }
