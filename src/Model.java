@@ -74,12 +74,14 @@ public class Model {
 	{
 		// Player Logic first 
 		playerLogic(); 
+		//Ground Logic
+		//platformLogic();
 		// Enemy Logic next
 		//enemyLogic();
 		// Bullets move next 
 		//bulletLogic();
 		// interactions between objects 
-		gameLogic(); 
+		//gameLogic(); 
 	   
 	}
 
@@ -105,6 +107,14 @@ public class Model {
 			}
 		}
 		
+	}
+	
+	//update the physical location of the platforms as the player moves position
+	private void platformLogic() {
+		for(Platform ground: grounds) {
+			//System.out.println(ground.getX());
+			ground.setX(-(int) Player.getCentre().getX());
+		}
 	}
 
 	private void enemyLogic() {
@@ -166,6 +176,7 @@ public class Model {
 		if(Player.getCentre().getY() < grounds.get(0).getRect().y-50 && !Controller.getInstance().isKeyWPressed()) {
 			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
 		}*/
+		
 		//Platform Gravity
 		if(Player.getCentre().getY() < getGroundY()-50 && !Controller.getInstance().isKeyWPressed()) {
 			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
