@@ -1,5 +1,6 @@
 Recreate the platforms x position to match the repainted platforms
-Implement collision detection on all of the platforms (is there a better way than looping through every platform?)
-Create a list of platforms which are above the ground. Gravity will change to the platforms once player is above
+(is there a collision detection method better than looping through every platform?)
 Store power-ups across the level which changes the players animation and speed / jump height
 Player can die and reset to the start if falls down through hole
+Add enemies
+Change animations depending what way the character is moving (setTextureLocation)

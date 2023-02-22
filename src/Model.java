@@ -171,23 +171,25 @@ public class Model {
 
 	private void playerLogic() {
 		
+		int playerX = (int) Player.getCentre().getX();
+		int playerY = (int) Player.getCentre().getY();
 		// smoother animation is possible if we make a target position  // done but may try to change things for students  
 		 
 		//check for movement and if you fired a bullet 
 		
 		//Collision detection gravity
-		if(!isOnPlatform((int)Player.getCentre().getX(), (int)Player.getCentre().getY()) && !Controller.getInstance().isKeyWPressed()) {
+		if(!isOnPlatform(playerX, playerY) && !Controller.getInstance().isKeyWPressed()) {
 			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
 		}
 		
-		//Move left
-		if(Controller.getInstance().isKeyAPressed()){Player.getCentre().ApplyVector( new Vector3f(-2,0,0)); }
+		//Move left if not colliding with a platform
+		if(Controller.getInstance().isKeyAPressed() && !isOnPlatform(playerX, playerY - 25)){Player.getCentre().ApplyVector( new Vector3f(-2,0,0)); }
 		
-		//Move right
-		if(Controller.getInstance().isKeyDPressed()){Player.getCentre().ApplyVector( new Vector3f(2,0,0)); }
+		//Move right if not colliding with a platform
+		if(Controller.getInstance().isKeyDPressed() && !isOnPlatform(playerX + playerWidth, playerY - 25)){Player.getCentre().ApplyVector( new Vector3f(2,0,0)); }
 			
-		//Jump
-		if(Controller.getInstance().isKeyWPressed()){Player.getCentre().ApplyVector( new Vector3f(0,5,0));	}		
+		//Jump if head is not colliding with a platform
+		if(Controller.getInstance().isKeyWPressed() && !isOnPlatform(playerX + 25, playerY - 50)){Player.getCentre().ApplyVector( new Vector3f(0,5,0));	}		
 		
 		//Move Down
 		//if(Controller.getInstance().isKeySPressed()){Player.getCentre().ApplyVector( new Vector3f(0,-2,0));}
