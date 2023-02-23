@@ -44,11 +44,13 @@ public class Model {
 	 private int Score=0; 
 	 private final int playerWidth = 50;
 	 private final int playerHeight = 50;
+	 private final int frameHeight = 600;
 
 	public Model() {
 		//setup game world 
 		grounds = new ArrayList<>();
-		grounds.add(new Platform(0, 500, 500, 100, Color.black));
+		grounds.add(new Platform(0, 500, 300, 100, Color.black));
+		grounds.add(new Platform(400, 500, 100, 100, Color.black));
 		grounds.add(new Platform(500, 450, 200, 150, Color.black));
 		grounds.add(new Platform(700, 400, 200, 200, Color.black));
 		grounds.add(new Platform(900, 500, 1100, 100, Color.black));
@@ -79,6 +81,8 @@ public class Model {
 		playerLogic(); 
 		//Ground Logic
 		//platformLogic();
+		//Player death logic
+		deathLogic();
 		// Enemy Logic next
 		//enemyLogic();
 		// Bullets move next 
@@ -167,6 +171,12 @@ public class Model {
 			} 
 		} 
 		
+	}
+	
+	private void deathLogic() {
+		if((int) Player.getCentre().getY() > frameHeight) {
+			Player.setCentre(new Point3f(100,300,0));
+		}
 	}
 
 	private void playerLogic() {

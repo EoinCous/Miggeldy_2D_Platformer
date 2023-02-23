@@ -94,6 +94,7 @@ public class Viewer extends JPanel {
 		//Draw background 
 		drawBackground(g);
 		
+		
 		//Draw ground platforms
 		List<Platform> grounds = gameworld.getGrounds();
 		for(Platform ground : grounds) {
@@ -104,7 +105,7 @@ public class Viewer extends JPanel {
 		
 		/*
 		//Draw platforms
-		List<Platform> platforms = gameworld.getPlatforms();
+		List<Platform> platforms = gameworld.getGrounds();
 		for(Platform platform : platforms) {
 			platform.draw(g);
 		}*/
@@ -147,7 +148,7 @@ public class Viewer extends JPanel {
 
 	private void drawBackground(Graphics g)
 	{
-		File TextureToLoad = new File("res/misty_background.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
+		File TextureToLoad = new File("res/misty_background_long.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
 		try {
 			Image myImage = ImageIO.read(TextureToLoad); 
 			//g.drawImage(myImage, -cameraPosition, 0, null);

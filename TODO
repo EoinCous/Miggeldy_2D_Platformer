@@ -4,3 +4,7 @@ Store power-ups across the level which changes the players animation and speed /
 Player can die and reset to the start if falls down through hole
 Add enemies
 Change animations depending what way the character is moving (setTextureLocation)
+
+
+Draw the platforms based on the players position and update the x value of the platforms
+Update the x value of the platforms based on the players x position and draw the platforms
