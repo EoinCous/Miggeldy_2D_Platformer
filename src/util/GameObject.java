@@ -1,4 +1,14 @@
 package util;
+
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 /*
  * Created by Abraham Campbell on 15/01/2020.
  *   Copyright (c) 2020  Abraham Campbell
@@ -70,6 +80,21 @@ public class GameObject {
 			}
 		 
 		return blanktexture; 
+	}
+	
+	public void draw(int x, int y, int width, int height, String texture,Graphics g) { 
+		File TextureToLoad = new File(texture);  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
+		try {
+			Image myImage = ImageIO.read(TextureToLoad);
+			g.drawImage(myImage, x, y, width, height, null);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	}
+	
+	public Rectangle getBounds() {
+		return new Rectangle((int)centre.getX(), (int)centre.getY(), width, height);
 	}
   
 }

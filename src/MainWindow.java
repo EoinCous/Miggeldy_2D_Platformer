@@ -85,7 +85,6 @@ public class MainWindow {
         File BackgroundToLoad = new File("res/Miggeldy_Menu.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
 		
         try {
-			 
 			 BufferedImage myPicture = ImageIO.read(BackgroundToLoad);
 			 ImageIcon imageIcon = new ImageIcon(myPicture);
 			 BackgroundImageForStartMenu = new JLabel(imageIcon);
@@ -96,13 +95,13 @@ public class MainWindow {
 			e.printStackTrace();
 		}   
 		
-		 
 		frame.add(startMenuButton);  
         frame.setVisible(true);   
 	}
 
 	public static void main(String[] args) {
 		MainWindow hello = new MainWindow();  //sets up environment 
+		
 		while(true)   //not nice but remember we do just want to keep looping till the end.  // this could be replaced by a thread but again we want to keep things simple 
 		{ 
 			//swing has timer class to help us time this but I'm writing my own, you can of course use the timer, but I want to set FPS and display it 
@@ -111,21 +110,17 @@ public class MainWindow {
 			long FrameCheck = System.currentTimeMillis() + (long) TimeBetweenFrames; 
 			
 			//wait till next time step 
-		 while (FrameCheck > System.currentTimeMillis()){} 
+			while (FrameCheck > System.currentTimeMillis()){} 
 			
-			
-			if(startGame)
-				 {
-				 gameloop();
-				 }
+			if(startGame){
+				gameloop();
+			}
 			
 			//UNIT test to see if framerate matches 
-		 UnitTests.CheckFrameRate(System.currentTimeMillis(),FrameCheck, TargetFPS); 
-			  
-		}
-		
-		
+			UnitTests.CheckFrameRate(System.currentTimeMillis(),FrameCheck, TargetFPS); 
+		}	
 	} 
+	
 	//Basic Model-View-Controller pattern 
 	private static void gameloop() { 
 		// GAMELOOP  
@@ -142,8 +137,6 @@ public class MainWindow {
 		// Both these calls could be setup as  a thread but we want to simplify the game logic for you.  
 		//score update  
 		frame.setTitle("Score =  "+ gameworld.getScore()); 
-		
-		 
 	}
 
 }

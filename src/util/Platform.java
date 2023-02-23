@@ -7,17 +7,17 @@ import java.awt.Rectangle;
 public class Platform {
 	private Rectangle rect;
 	private Color color;
-	private int xPos;
+	private int x;
 	private int y;
 	private int width;
 	private int height;
 	
 	public Platform(int x, int y, int width, int height, Color color) {
-		this.xPos = x;
+		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		rect = new Rectangle(xPos, y, width, height);
+		rect = new Rectangle(x, y, width, height);
 		this.color = color;
 	}
 	
@@ -36,15 +36,15 @@ public class Platform {
 	}
 	
 	public void setX(int x) {
-		this.xPos = x;
+		rect.setLocation(x, y);
 	}
 	
 	public int getX() {
-		return xPos;
+		return x;
 	}
 	
 	public Rectangle getBounds() {
-		return new Rectangle(xPos, y, width, height);
+		return new Rectangle(x, y, width, height);
 	}
 
 }

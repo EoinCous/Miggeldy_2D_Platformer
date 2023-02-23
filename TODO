@@ -1,10 +1,11 @@
 Recreate the platforms x position to match the repainted platforms
 (is there a collision detection method better than looping through every platform?)
 Store power-ups across the level which changes the players animation and speed / jump height
-Player can die and reset to the start if falls down through hole
 Add enemies
 Change animations depending what way the character is moving (setTextureLocation)
 
 
 Draw the platforms based on the players position and update the x value of the platforms
 Update the x value of the platforms based on the players x position and draw the platforms
+
+Create a static objects class with all of the platforms and power ups

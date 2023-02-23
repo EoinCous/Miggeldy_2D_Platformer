@@ -47,12 +47,12 @@ SOFTWARE.
  */ 
 public class Viewer extends JPanel {
 	private long CurrentAnimationTime= 0;
+	private boolean levelDrawn = false;
 	
 	Model gameworld =new Model(); 
 	 
 	public Viewer(Model World) {
 		this.gameworld=World;
-		// TODO Auto-generated constructor stub
 	}
 
 	public Viewer(LayoutManager layout) {
@@ -72,62 +72,24 @@ public class Viewer extends JPanel {
 
 	//TODO: Fix method
 	public void updateview() {
-		
 		this.repaint();
-
 	}
 	
-	
-	public void paintComponent(Graphics g) {
+	public void paintComponent(Graphics graphics) {
 		
-		super.paintComponent(g);
+		super.paintComponent(graphics);
 		CurrentAnimationTime++; // runs animation time step 
 		
-		
-		//Draw player Game Object 
-		int x = (int) gameworld.getPlayer().getCentre().getX();
-		int y = (int) gameworld.getPlayer().getCentre().getY();
-		int width = (int) gameworld.getPlayer().getWidth();
-		int height = (int) gameworld.getPlayer().getHeight();
-		String texture = gameworld.getPlayer().getTexture();
-		
-		//Draw background 
-		drawBackground(g);
-		
-		
-		//Draw ground platforms
-		List<Platform> grounds = gameworld.getGrounds();
-		for(Platform ground : grounds) {
-			//ground.draw(g);
-			//draw platforms with respect to players.x
-			ground.drawWithPlayersPosition(g, (int) gameworld.getPlayer().getCentre().getX());
-		}
-		
+		drawLevel(graphics);
 		/*
-		//Draw platforms
-		List<Platform> platforms = gameworld.getGrounds();
-		for(Platform platform : platforms) {
-			platform.draw(g);
+		//Draw level once
+		if(!levelDrawn) {
+			drawLevel(graphics);
+			levelDrawn = true;
 		}*/
-	
+		
 		//Draw player
-		drawPlayer(x, y, width, height, texture,g);
-		
-		/*
-		//Draw Bullets 
-		// change back 
-		gameworld.getBullets().forEach((temp) -> 
-		{ 
-			drawBullet((int) temp.getCentre().getX(), (int) temp.getCentre().getY(), (int) temp.getWidth(), (int) temp.getHeight(), temp.getTexture(),g);	 
-		}); 
-		
-		//Draw Enemies   
-		gameworld.getEnemies().forEach((temp) -> 
-		{
-			drawEnemies((int) temp.getCentre().getX(), (int) temp.getCentre().getY(), (int) temp.getWidth(), (int) temp.getHeight(), temp.getTexture(),g);	 
-		 
-	    }); 
-		*/
+		drawPlayer(graphics);	
 	}
 	
 	private void drawEnemies(int x, int y, int width, int height, String texture, Graphics g) {
@@ -177,7 +139,13 @@ public class Viewer extends JPanel {
 	}
 	
 
-	private void drawPlayer(int x, int y, int width, int height, String texture,Graphics g) { 
+	private void drawPlayer(Graphics g) { 
+		//Draw player Game Object 
+		int x = (int) gameworld.getPlayer().getCentre().getX();
+		int y = (int) gameworld.getPlayer().getCentre().getY();
+		int width = (int) gameworld.getPlayer().getWidth();
+		int height = (int) gameworld.getPlayer().getHeight();
+		String texture = gameworld.getPlayer().getTexture();
 		File TextureToLoad = new File(texture);  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
 		try {
 			Image myImage = ImageIO.read(TextureToLoad);
@@ -191,15 +159,25 @@ public class Viewer extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		 
-		//g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer));
-		//Lighnting Png from https://opengameart.org/content/animated-spaceships  its 32x32 thats why I know to increament by 32 each time 
-		// Bullets from https://opengameart.org/forumtopic/tatermands-art 
-		// background image from https://www.needpix.com/photo/download/677346/space-stars-nebula-background-galaxy-universe-free-pictures-free-photos-free-images
+	}
+	
+	private void drawLevel(Graphics graphics) {
 		
-	}		 
-	 
-
+		//Draw background 
+		drawBackground(graphics);
+				
+		//Draw power ups
+		List<GameObject> powerUps = gameworld.getCurrentLevel().getPowerUps();
+		for(GameObject powerUp : powerUps) {
+			powerUp.draw((int)powerUp.getCentre().getX(), (int)powerUp.getCentre().getY(), 50, 50, powerUp.getTexture(), graphics);
+		}
+		
+		//Draw platforms
+		List<Platform> platforms = gameworld.getCurrentLevel().getPlatforms();
+		for(Platform platform : platforms) {
+			platform.draw(graphics);
+		}
+	}
 }
 
 
