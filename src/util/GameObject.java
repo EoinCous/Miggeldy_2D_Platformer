@@ -82,6 +82,10 @@ public class GameObject {
 		return blanktexture; 
 	}
 	
+	public void setTexture(String textureLocation) {
+		this.textureLocation = textureLocation;
+	}
+	
 	public void draw(int x, int y, int width, int height, String texture,Graphics g) { 
 		File TextureToLoad = new File(texture);  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
 		try {

@@ -52,7 +52,8 @@ public class MainWindow {
 	 private static Viewer canvas = new  Viewer(gameworld);
 	 private KeyListener Controller =new Controller()  ; 
 	 private static int TargetFPS = 100;
-	 private static boolean startGame= false; 
+	 private static boolean startGame = false; 
+	 private static boolean paused = false; 
 	 private JLabel BackgroundImageForStartMenu ;
 	  
 	public MainWindow() {
@@ -112,6 +113,7 @@ public class MainWindow {
 			//wait till next time step 
 			while (FrameCheck > System.currentTimeMillis()){} 
 			
+			//if(startGame && !paused){
 			if(startGame){
 				gameloop();
 			}
@@ -127,6 +129,7 @@ public class MainWindow {
 		
 		// controller input  will happen on its own thread 
 		// So no need to call it explicitly 
+		//pauseOption();
 		
 		// model update   
 		gameworld.gamelogic();
@@ -137,6 +140,23 @@ public class MainWindow {
 		// Both these calls could be setup as  a thread but we want to simplify the game logic for you.  
 		//score update  
 		frame.setTitle("Score =  "+ gameworld.getScore()); 
+	}
+	
+	private static void pauseOption() {
+		JButton optionsButton = new JButton("|||");  // start button 
+        optionsButton.addActionListener(new ActionListener()
+           { 
+			@Override
+			public void actionPerformed(ActionEvent e) { 
+				if(paused) {
+					paused = false;
+				}else {
+					paused = true;
+				}
+			}});  
+        int buttonWidth = 40;
+        optionsButton.setBounds(frame.getWidth()/8 - (buttonWidth*2), frame.getHeight()/16, 40, buttonWidth);
+        canvas.add(optionsButton);
 	}
 
 }
