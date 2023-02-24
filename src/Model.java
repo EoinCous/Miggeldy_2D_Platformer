@@ -43,6 +43,9 @@ public class Model {
 	 private Controller controller = Controller.getInstance();
 	 private CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
 	 private CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
+	 private int jumpTime = 0;
+	 private static final int MAX_JUMP_TIME = 20; // Change this value to adjust the maximum jump time
+	 private int jumpTimer = 0;
 	 private Level currentLevel;
 	 private int level = 1;
 	 private int Score=0; 
@@ -151,8 +154,10 @@ public class Model {
 		//check for movement and if you fired a bullet 
 		
 		//Collision detection gravity
-		if(!isOnPlatform(playerX, playerY) && !Controller.getInstance().isKeyWPressed()) {
+		if(!isOnPlatform(playerX, playerY) || (!isOnPlatform(playerX, playerY) && jumpTimer == 0)) {
 			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
+		}else {
+			jumpTimer--;
 		}
 		
 		//Move left if not colliding with a platform
@@ -168,7 +173,18 @@ public class Model {
 		}
 			
 		//Jump if head is not colliding with a platform
-		if(Controller.getInstance().isKeyWPressed() && !isOnPlatform(playerX + (playerWidth/16), playerY - (playerHeight/8))){Player.getCentre().ApplyVector( new Vector3f(0,5,0));	}		
+		if(Controller.getInstance().isKeyWPressed() && !isOnPlatform(playerX + (playerWidth/16), playerY - (playerHeight/8))){
+			if(jumpTime < MAX_JUMP_TIME) {
+				Player.getCentre().ApplyVector( new Vector3f(0,5,0));	
+				jumpTime++;
+				jumpTimer = 20;
+			}
+		}	
+		
+		// Reset jumpTime when the player lands on a platform
+		if (isOnPlatform((int) Player.getCentre().getX(), (int) Player.getCentre().getY())) {
+		    jumpTime = 0;
+		}
 		
 		//Move Down
 		//if(Controller.getInstance().isKeySPressed()){Player.getCentre().ApplyVector( new Vector3f(0,-2,0));}
@@ -227,6 +243,16 @@ public class Model {
 
 	public GameObject getPlayer() {
 		return Player;
+	}
+	
+	public void jumping(int playerX, int playerY) {
+		if(!isOnPlatform(playerX + (playerWidth/16), playerY - (playerHeight/8))) {
+			if(jumpTime < MAX_JUMP_TIME) {
+			Player.getCentre().ApplyVector( new Vector3f(0,5,0));	
+			jumpTime++;
+		}
+		}
+		
 	}
 	
 	private boolean isOnPlatform(int x, int y) {
