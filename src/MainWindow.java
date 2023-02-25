@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import util.UnitTests;
@@ -50,11 +51,11 @@ public class MainWindow {
 	 private static JFrame frame = new JFrame("Game");   // Change to the name of your game 
 	 private static Model gameworld= new Model();
 	 private static Viewer canvas = new  Viewer(gameworld);
-	 private KeyListener Controller =new Controller()  ; 
+	 private static KeyListener Controller =new Controller()  ; 
 	 private static int TargetFPS = 100;
 	 private static boolean startGame = false; 
-	 private static boolean paused = false; 
-	 private JLabel BackgroundImageForStartMenu ;
+	 private static JLabel BackgroundImageForStartMenu ;
+	 private static JButton startMenuButton;
 	  
 	public MainWindow() {
 	    frame.setSize(1000, 600);  // you can customise this later and adapt it to change on size. 
@@ -67,7 +68,7 @@ public class MainWindow {
 	    canvas.setVisible(false);   // this will become visible after you press the key. 
 		          
 		       
-        JButton startMenuButton = new JButton("Start Game");  // start button 
+        startMenuButton = new JButton("Start Game");  // start button 
         startMenuButton.addActionListener(new ActionListener()
            { 
 			@Override
@@ -139,25 +140,23 @@ public class MainWindow {
 		
 		// Both these calls could be setup as  a thread but we want to simplify the game logic for you.  
 		//score update  
-		frame.setTitle("Score =  "+ gameworld.getScore()); 
+		frame.setTitle("Score =  "+ gameworld.getScore() + " Lives = " + gameworld.getLives()); 
+		
+		if(gameworld.getLives() < 1) {
+			endGame();
+		}
 	}
 	
-	private static void pauseOption() {
-		JButton optionsButton = new JButton("|||");  // start button 
-        optionsButton.addActionListener(new ActionListener()
-           { 
-			@Override
-			public void actionPerformed(ActionEvent e) { 
-				if(paused) {
-					paused = false;
-				}else {
-					paused = true;
-				}
-			}});  
-        int buttonWidth = 40;
-        optionsButton.setBounds(frame.getWidth()/8 - (buttonWidth*2), frame.getHeight()/16, 40, buttonWidth);
-        canvas.add(optionsButton);
-	}
+	private static void endGame() {
+		   JOptionPane.showMessageDialog(null, "Game Over! Your score was " + gameworld.getScore() + ".");
+		   startGame = false; // stop the game loop
+		   gameworld.resetGame(); // reset the game world
+		   frame.setTitle("Game"); // reset the frame title
+		   canvas.setVisible(false); // hide the canvas
+		   canvas.removeKeyListener(Controller); // remove the controller from the canvas
+		   BackgroundImageForStartMenu.setVisible(true); // show the background image for the start menu
+		   startMenuButton.setVisible(true); // show the start menu button
+		}
 
 }
 

@@ -39,19 +39,20 @@ SOFTWARE.
  */ 
 public class Model {
 	
-	 private GameObject Player;
-	 private Controller controller = Controller.getInstance();
-	 private CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
-	 private CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
-	 private int jumpTime = 0;
-	 private static final int MAX_JUMP_TIME = 20; // Change this value to adjust the maximum jump time
-	 private int jumpTimer = 0;
-	 private Level currentLevel;
-	 private int level = 1;
-	 private int Score=0; 
-	 private final int playerWidth = 45;
-	 private final int playerHeight = 45;
-	 private final int frameHeight = 600;
+	private GameObject Player;
+	private Controller controller = Controller.getInstance();
+	private CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
+	private CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
+	private int jumpTime = 0;
+	private static final int MAX_JUMP_TIME = 30; // Change this value to adjust the maximum jump time
+	private int jumpTimer = 0;
+	private Level currentLevel;
+	private int level = 1;
+	private int lives = 3;
+	private int Score = 0; 
+	private final int playerWidth = 45;
+	private final int playerHeight = 45;
+	private final int frameHeight = 600;
 
 	public Model() {
 		//setup game world 
@@ -141,6 +142,7 @@ public class Model {
 	
 	private void deathLogic() {
 		if((int) Player.getCentre().getY() > frameHeight) {
+			lives--;
 			Player.setCentre(new Point3f(100,300,0));
 		}
 	}
@@ -161,13 +163,13 @@ public class Model {
 		}
 		
 		//Move left if not colliding with a platform
-		if(Controller.getInstance().isKeyAPressed() && !isOnPlatform(playerX, playerY - (playerHeight/2))){
+		if(Controller.getInstance().isKeyAPressed() && !isOnPlatform(playerX, playerY - (playerHeight/16))){
 			Player.getCentre().ApplyVector( new Vector3f(-2,0,0)); 
 			Player.setTexture("res/miggeldy_running_l.png");
 		}
 		
 		//Move right if not colliding with a platform
-		if(Controller.getInstance().isKeyDPressed() && !isOnPlatform(playerX + (playerWidth/8), playerY - (playerHeight/2))){
+		if(Controller.getInstance().isKeyDPressed() && !isOnPlatform(playerX + (playerWidth/16), playerY - (playerHeight/16))){
 			Player.getCentre().ApplyVector( new Vector3f(2,0,0)); 
 			Player.setTexture("res/miggeldy_running.png");
 		}
@@ -303,8 +305,19 @@ public class Model {
 		return Score;
 	}
 	
+	public int getLives() {
+		return lives;
+	}
+	
 	public Level getCurrentLevel() {
 		return currentLevel;
+	}
+	
+	public void resetGame() {
+		lives = 3;
+		Score = 0;
+		level = 1;
+		currentLevel = new Level1();
 	}
  
 
