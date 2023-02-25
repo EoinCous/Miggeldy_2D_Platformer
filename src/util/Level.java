@@ -5,6 +5,7 @@ import java.util.List;
 public class Level {
 	private List<Platform> platforms;
 	private List<GameObject> powerUps;
+	private GameObject checkpoint;
 	private int cameraPosition;
 	
 	public Level() {
@@ -17,6 +18,10 @@ public class Level {
 	
 	public List<GameObject> getPowerUps(){
 		return powerUps;
+	}
+	
+	public GameObject getCheckpoint() {
+		return checkpoint;
 	}
 	
 	public void updateCameraPosition(int x) {

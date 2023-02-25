@@ -44,7 +44,7 @@ public class Model {
 	private CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
 	private CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
 	private int jumpTime = 0;
-	private static final int MAX_JUMP_TIME = 30; // Change this value to adjust the maximum jump time
+	private static int MAX_JUMP_TIME = 30; // Change this value to adjust the maximum jump time
 	private int jumpTimer = 0;
 	private Level currentLevel;
 	private int level = 1;
@@ -53,6 +53,8 @@ public class Model {
 	private final int playerWidth = 45;
 	private final int playerHeight = 45;
 	private final int frameHeight = 600;
+	private boolean powerUp = false;
+	private int playerSpeed = 2;
 
 	public Model() {
 		//setup game world 
@@ -106,7 +108,10 @@ public class Model {
 	
 	private void powerUpLogic() {
 		if(touchingPowerUp((int)Player.getCentre().getX(), (int)Player.getCentre().getY())) {
+			powerUp = true;
 			Player.setTexture("res/miggeldy_on_bike.png");
+			MAX_JUMP_TIME*=2;
+			lives++;
 			Score++;
 		}
 	}
@@ -157,21 +162,23 @@ public class Model {
 		
 		//Collision detection gravity
 		if(!isOnPlatform(playerX, playerY) || (!isOnPlatform(playerX, playerY) && jumpTimer == 0)) {
-			Player.getCentre().ApplyVector( new Vector3f(0,-2,0));
+			Player.getCentre().ApplyVector( new Vector3f(0,-playerSpeed,0));
 		}else {
 			jumpTimer--;
 		}
 		
 		//Move left if not colliding with a platform
 		if(Controller.getInstance().isKeyAPressed() && !isOnPlatform(playerX, playerY - (playerHeight/16))){
-			Player.getCentre().ApplyVector( new Vector3f(-2,0,0)); 
+			Player.getCentre().ApplyVector( new Vector3f(-playerSpeed,0,0)); 
 			Player.setTexture("res/miggeldy_running_l.png");
 		}
 		
 		//Move right if not colliding with a platform
 		if(Controller.getInstance().isKeyDPressed() && !isOnPlatform(playerX + (playerWidth/16), playerY - (playerHeight/16))){
-			Player.getCentre().ApplyVector( new Vector3f(2,0,0)); 
-			Player.setTexture("res/miggeldy_running.png");
+			Player.getCentre().ApplyVector( new Vector3f(playerSpeed,0,0)); 
+			if(!powerUp) {
+				Player.setTexture("res/miggeldy_running.png");
+			}
 		}
 			
 		//Jump if head is not colliding with a platform
@@ -281,15 +288,14 @@ public class Model {
 	    return false;
 	}
 	
+	//Check if the player has reached the level's checkpoint
 	private boolean touchingCheckpoint(int x, int y) {
-		// loop through each platform and check for collisions
-	    for (GameObject powerUp : currentLevel.getPowerUps()) {
-	        Rectangle playerBounds = new Rectangle(x, y, playerWidth, playerHeight);
-	        Rectangle platformBounds = powerUp.getBounds();
-	        if (playerBounds.intersects(platformBounds)) {
-	            return true;
-	        }
-	    }
+	    GameObject checkpoint = currentLevel.getCheckpoint();
+	    Rectangle playerBounds = new Rectangle(x, y, playerWidth, playerHeight);
+        Rectangle platformBounds = checkpoint.getBounds();
+        if (playerBounds.intersects(platformBounds)) {
+            return true;
+        }
 	    return false;
 	}
 

@@ -9,6 +9,7 @@ import java.util.List;
 public class Level3 extends Level{
 	private List<Platform> platforms;
 	private List<GameObject> powerUps;
+	private GameObject checkpoint;
 	
 	private int cameraPosition;
 	
@@ -28,7 +29,9 @@ public class Level3 extends Level{
 				platforms.add(new Platform(1200, 100, 100, 50, Color.red));
 				
 				powerUps = new ArrayList<>();
-				powerUps.add(new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(800, 350, 0)));
+				powerUps.add(new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(300, 350, 0)));
+				
+				checkpoint = new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(800, 350, 0));
 	}
 	
 	public List<Platform> getPlatforms(){
@@ -37,6 +40,10 @@ public class Level3 extends Level{
 	
 	public List<GameObject> getPowerUps(){
 		return powerUps;
+	}
+	
+	public GameObject getCheckpoint() {
+		return checkpoint;
 	}
 	
 	public void updateCameraPosition(int x) {

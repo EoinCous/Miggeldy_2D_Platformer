@@ -177,6 +177,9 @@ public class Viewer extends JPanel {
 		for(Platform platform : platforms) {
 			platform.draw(graphics);
 		}
+		
+		GameObject checkpoint = gameworld.getCurrentLevel().getCheckpoint();
+		checkpoint.draw((int)checkpoint.getCentre().getX(), (int)checkpoint.getCentre().getY(), 50, 50, checkpoint.getTexture(), graphics);
 	}
 }
 
