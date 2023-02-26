@@ -13,6 +13,7 @@ import util.Level3;
 import util.Point3f;
 import util.Vector3f;
 import util.Platform;
+import util.Player;
 /*
  * Created by Abraham Campbell on 15/01/2020.
  *   Copyright (c) 2020  Abraham Campbell
@@ -50,8 +51,6 @@ public class Model {
 	private int level = 1;
 	private int lives = 3;
 	private int Score = 0; 
-	private final int playerWidth = 45;
-	private final int playerHeight = 45;
 	private final int frameHeight = 600;
 	private boolean powerUp = false;
 	private int playerSpeed = 2;
@@ -63,7 +62,7 @@ public class Model {
 		currentLevel = new Level1();
 		
 		//Player 
-		Player = new GameObject("res/miggeldy_standing.png",playerWidth,playerHeight,new Point3f(50,300,0));
+		Player = new Player("res/miggeldy_standing.png",new Point3f(50,300,0));
 	}
 	
 	// This is the heart of the game , where the model takes in all the inputs ,decides the outcomes and then changes the model accordingly. 
@@ -78,7 +77,7 @@ public class Model {
 		//Player death logic
 		deathLogic();
 		
-		//powerUpLogic();
+		powerUpLogic();
 		// Enemy Logic next
 		//enemyLogic();
 		// Bullets move next 
@@ -110,7 +109,8 @@ public class Model {
 		if(touchingPowerUp((int)Player.getCentre().getX(), (int)Player.getCentre().getY())) {
 			powerUp = true;
 			Player.setTexture("res/miggeldy_on_bike.png");
-			MAX_JUMP_TIME*=2;
+			MAX_JUMP_TIME *= 2;
+			playerSpeed *= 2;
 			lives++;
 			Score++;
 		}
@@ -168,13 +168,15 @@ public class Model {
 		}
 		
 		//Move left if not colliding with a platform
-		if(Controller.getInstance().isKeyAPressed() && !isOnPlatform(playerX, playerY - (playerHeight/16))){
+		if(Controller.getInstance().isKeyAPressed() && !isOnPlatform(playerX, playerY - (Player.getHeight()/16))){
 			Player.getCentre().ApplyVector( new Vector3f(-playerSpeed,0,0)); 
-			Player.setTexture("res/miggeldy_running_l.png");
+			if(!powerUp) {
+				Player.setTexture("res/miggeldy_running_l.png");
+			}
 		}
 		
 		//Move right if not colliding with a platform
-		if(Controller.getInstance().isKeyDPressed() && !isOnPlatform(playerX + (playerWidth/16), playerY - (playerHeight/16))){
+		if(Controller.getInstance().isKeyDPressed() && !isOnPlatform(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/16))){
 			Player.getCentre().ApplyVector( new Vector3f(playerSpeed,0,0)); 
 			if(!powerUp) {
 				Player.setTexture("res/miggeldy_running.png");
@@ -182,7 +184,7 @@ public class Model {
 		}
 			
 		//Jump if head is not colliding with a platform
-		if(Controller.getInstance().isKeyWPressed() && !isOnPlatform(playerX + (playerWidth/16), playerY - (playerHeight/8))){
+		if(Controller.getInstance().isKeyWPressed() && !isOnPlatform(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/8))){
 			if(jumpTime < MAX_JUMP_TIME) {
 				Player.getCentre().ApplyVector( new Vector3f(0,5,0));	
 				jumpTime++;
@@ -255,7 +257,7 @@ public class Model {
 	}
 	
 	public void jumping(int playerX, int playerY) {
-		if(!isOnPlatform(playerX + (playerWidth/16), playerY - (playerHeight/8))) {
+		if(!isOnPlatform(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/8))) {
 			if(jumpTime < MAX_JUMP_TIME) {
 			Player.getCentre().ApplyVector( new Vector3f(0,5,0));	
 			jumpTime++;
@@ -267,7 +269,7 @@ public class Model {
 	private boolean isOnPlatform(int x, int y) {
 	    // loop through each platform and check for collisions
 	    for (Platform platform : currentLevel.getPlatforms()) {
-	        Rectangle playerBounds = new Rectangle(x, y, playerWidth, playerHeight);
+	        Rectangle playerBounds = new Rectangle(x, y, Player.getWidth(), Player.getHeight());
 	        Rectangle platformBounds = platform.getBounds();
 	        if (playerBounds.intersects(platformBounds)) {
 	            return true;
@@ -279,9 +281,10 @@ public class Model {
 	private boolean touchingPowerUp(int x, int y) {
 		// loop through each platform and check for collisions
 	    for (GameObject powerUp : currentLevel.getPowerUps()) {
-	        Rectangle playerBounds = new Rectangle(x, y, playerWidth, playerHeight);
+	        Rectangle playerBounds = new Rectangle(x, y, Player.getWidth(), Player.getHeight());
 	        Rectangle platformBounds = powerUp.getBounds();
 	        if (playerBounds.intersects(platformBounds)) {
+	        	currentLevel.removePowerUp(powerUp);
 	            return true;
 	        }
 	    }
@@ -291,7 +294,7 @@ public class Model {
 	//Check if the player has reached the level's checkpoint
 	private boolean touchingCheckpoint(int x, int y) {
 	    GameObject checkpoint = currentLevel.getCheckpoint();
-	    Rectangle playerBounds = new Rectangle(x, y, playerWidth, playerHeight);
+	    Rectangle playerBounds = new Rectangle(x, y, Player.getWidth(), Player.getHeight());
         Rectangle platformBounds = checkpoint.getBounds();
         if (playerBounds.intersects(platformBounds)) {
             return true;

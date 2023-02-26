@@ -43,6 +43,10 @@ public class Level1 extends Level{
 			platform.setX(cameraPosition);
 		}
 	}
+	
+	public void removePowerUp(GameObject powerUp) {
+		powerUps.remove(powerUp);
+	}
 
 	
 }

@@ -30,4 +30,8 @@ public class Level {
 		}
 	}
 
+	public void removePowerUp(GameObject powerUp) {
+		powerUps.remove(powerUp);
+	}
+
 }
