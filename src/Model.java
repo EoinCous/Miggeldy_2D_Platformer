@@ -40,20 +40,20 @@ SOFTWARE.
  */ 
 public class Model {
 	
-	private GameObject Player;
+	private Player Player;
 	private Controller controller = Controller.getInstance();
 	private CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
 	private CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
-	private int jumpTime = 0;
-	private static int MAX_JUMP_TIME = 30; // Change this value to adjust the maximum jump time
-	private int jumpTimer = 0;
+	//private int jumpTime = 0;
+	//private static int MAX_JUMP_TIME = 30; // Change this value to adjust the maximum jump time
+	//private int jumpTimer = 0;
 	private Level currentLevel;
 	private int level = 1;
-	private int lives = 3;
-	private int Score = 0; 
+	//private int lives = 3;
+	//private int Score = 0; 
 	private final int frameHeight = 600;
-	private boolean powerUp = false;
-	private int playerSpeed = 2;
+	//private boolean powerUp = false;
+	//private int playerSpeed = 2;
 
 	public Model() {
 		//setup game world 
@@ -100,19 +100,19 @@ public class Model {
 					break;
 			}
 			Player.setCentre(new Point3f(100,300,0));
-			Score++;
+			Player.setScore(+1);
 			level++;
 		}
 	}
 	
 	private void powerUpLogic() {
 		if(touchingPowerUp((int)Player.getCentre().getX(), (int)Player.getCentre().getY())) {
-			powerUp = true;
+			Player.setPowerUp(true);
 			Player.setTexture("res/miggeldy_on_bike.png");
-			MAX_JUMP_TIME *= 2;
-			playerSpeed *= 2;
-			lives++;
-			Score++;
+			Player.setMAX_JUMP_TIME(Player.getMAX_JUMP_TIME()*2);
+			Player.setSpeed(Player.getSpeed()*2);
+			Player.setLives(Player.getLives()+1);
+			Player.setScore(Player.getScore()+1);
 		}
 	}
 
@@ -131,7 +131,7 @@ public class Model {
 				{
 					EnemiesList.remove(temp);
 					BulletList.remove(Bullet);
-					Score++;
+					Player.setScore(+1);
 				}  
 			}
 		}
@@ -147,7 +147,7 @@ public class Model {
 	
 	private void deathLogic() {
 		if((int) Player.getCentre().getY() > frameHeight) {
-			lives--;
+			Player.setLives(Player.getLives()-1);
 			Player.setCentre(new Point3f(100,300,0));
 		}
 	}
@@ -161,40 +161,41 @@ public class Model {
 		//check for movement and if you fired a bullet 
 		
 		//Collision detection gravity
-		if(!isOnPlatform(playerX, playerY) || (!isOnPlatform(playerX, playerY) && jumpTimer == 0)) {
-			Player.getCentre().ApplyVector( new Vector3f(0,-playerSpeed,0));
+		if(!isOnPlatform(playerX, playerY) || (!isOnPlatform(playerX, playerY) && Player.getJumpTimer() == 0)) {
+			Player.getCentre().ApplyVector( new Vector3f(0,-Player.getSpeed(),0));
 		}else {
-			jumpTimer--;
+			//create increment && derement methods
+			Player.setJumpTimer(Player.getJumpTimer()-1);
 		}
 		
 		//Move left if not colliding with a platform
 		if(Controller.getInstance().isKeyAPressed() && !isOnPlatform(playerX, playerY - (Player.getHeight()/16))){
-			Player.getCentre().ApplyVector( new Vector3f(-playerSpeed,0,0)); 
-			if(!powerUp) {
+			Player.getCentre().ApplyVector( new Vector3f(-Player.getSpeed(),0,0)); 
+			if(!Player.isPowerUp()) {
 				Player.setTexture("res/miggeldy_running_l.png");
 			}
 		}
 		
 		//Move right if not colliding with a platform
 		if(Controller.getInstance().isKeyDPressed() && !isOnPlatform(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/16))){
-			Player.getCentre().ApplyVector( new Vector3f(playerSpeed,0,0)); 
-			if(!powerUp) {
+			Player.getCentre().ApplyVector( new Vector3f(Player.getSpeed(),0,0)); 
+			if(!Player.isPowerUp()) {
 				Player.setTexture("res/miggeldy_running.png");
 			}
 		}
 			
 		//Jump if head is not colliding with a platform
 		if(Controller.getInstance().isKeyWPressed() && !isOnPlatform(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/8))){
-			if(jumpTime < MAX_JUMP_TIME) {
+			if(Player.getJumpTime() < Player.getMAX_JUMP_TIME()) {
 				Player.getCentre().ApplyVector( new Vector3f(0,5,0));	
-				jumpTime++;
-				jumpTimer = 20;
+				Player.setJumpTime(Player.getJumpTime()+1);
+				Player.setJumpTimer(20);
 			}
 		}	
 		
 		// Reset jumpTime when the player lands on a platform
 		if (isOnPlatform((int) Player.getCentre().getX(), (int) Player.getCentre().getY())) {
-		    jumpTime = 0;
+		    Player.setJumpTime(0);
 		}
 		
 		//Move Down
@@ -205,30 +206,6 @@ public class Model {
 			CreateBullet();
 			Controller.getInstance().setKeySpacePressed(false);
 		} 
-	}
-	
-	private void enemyLogic() {
-		// TODO Auto-generated method stub
-		for (GameObject temp : EnemiesList){
-		    // Move enemies 
-			  
-			temp.getCentre().ApplyVector(new Vector3f(0,-1,0));
-						 
-			//see if they get to the top of the screen ( remember 0 is the top 
-			if (temp.getCentre().getY()==900.0f)  // current boundary need to pass value to model 
-			{
-				EnemiesList.remove(temp);
-				
-				// enemies win so score decreased 
-				Score--;
-			} 
-		}
-		
-		if (EnemiesList.size()<2){
-			while (EnemiesList.size()<6){
-				EnemiesList.add(new GameObject("res/canada_goose_logo.png",50,50,new Point3f(((float)Math.random()*1000),0,0))); 
-			}
-		}
 	}
 
 	private void bulletLogic() {
@@ -258,10 +235,10 @@ public class Model {
 	
 	public void jumping(int playerX, int playerY) {
 		if(!isOnPlatform(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/8))) {
-			if(jumpTime < MAX_JUMP_TIME) {
-			Player.getCentre().ApplyVector( new Vector3f(0,5,0));	
-			jumpTime++;
-		}
+			if(Player.getJumpTime() < Player.getMAX_JUMP_TIME()) {
+				Player.getCentre().ApplyVector( new Vector3f(0,5,0));	
+				Player.setJumpTime(Player.getJumpTime()+1);
+			}
 		}
 		
 	}
@@ -311,11 +288,11 @@ public class Model {
 	}
 
 	public int getScore() { 
-		return Score;
+		return Player.getScore();
 	}
 	
 	public int getLives() {
-		return lives;
+		return Player.getLives();
 	}
 	
 	public Level getCurrentLevel() {
@@ -323,8 +300,8 @@ public class Model {
 	}
 	
 	public void resetGame() {
-		lives = 3;
-		Score = 0;
+		Player.setLives(3);
+		Player.setScore(0);
 		level = 1;
 		currentLevel = new Level1();
 	}

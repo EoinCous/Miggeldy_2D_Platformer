@@ -9,11 +9,11 @@ public class Player extends GameObject{
 	private static int MAX_JUMP_TIME = 30; // Change this value to adjust the maximum jump time
 	private int jumpTimer = 0;
 	private int lives = 3;
-	private int Score = 0; 
-	private final int playerWidth = 45;
-	private final int playerHeight = 45;
+	private int score = 0; 
+	private final int width = 45;
+	private final int height = 45;
 	private boolean powerUp = false;
-	private int playerSpeed = 2;
+	private int speed = 2;
 	
 	private Point3f centre= new Point3f(0,0,0);
 	private boolean hasTextured=false;
@@ -43,11 +43,11 @@ public class Player extends GameObject{
 	}
 
 	public int getWidth() {
-		return playerWidth;
+		return width;
 	}
 
 	public int getHeight() {
-		return playerHeight;
+		return height;
 	}
 
 	public String getTexture() {
@@ -64,7 +64,7 @@ public class Player extends GameObject{
 	}
 	
 	public Rectangle getBounds() {
-		return new Rectangle((int)centre.getX(), (int)centre.getY(), playerWidth, playerHeight);
+		return new Rectangle((int)centre.getX(), (int)centre.getY(), width, height);
 	}
 
 	public int getJumpTime() {
@@ -100,11 +100,11 @@ public class Player extends GameObject{
 	}
 
 	public int getScore() {
-		return Score;
+		return score;
 	}
 
 	public void setScore(int score) {
-		Score = score;
+		this.score = score;
 	}
 
 	public boolean isPowerUp() {
@@ -115,19 +115,19 @@ public class Player extends GameObject{
 		this.powerUp = powerUp;
 	}
 
-	public int getPlayerSpeed() {
-		return playerSpeed;
+	public int getSpeed() {
+		return speed;
 	}
 
-	public void setPlayerSpeed(int playerSpeed) {
-		this.playerSpeed = playerSpeed;
+	public void setSpeed(int speed) {
+		this.speed = speed;
 	}
 
 	public int getPlayerWidth() {
-		return playerWidth;
+		return width;
 	}
 
 	public int getPlayerHeight() {
-		return playerHeight;
+		return height;
 	}
 }
