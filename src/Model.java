@@ -44,16 +44,9 @@ public class Model {
 	private Controller controller = Controller.getInstance();
 	private CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
 	private CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
-	//private int jumpTime = 0;
-	//private static int MAX_JUMP_TIME = 30; // Change this value to adjust the maximum jump time
-	//private int jumpTimer = 0;
 	private Level currentLevel;
 	private int level = 1;
-	//private int lives = 3;
-	//private int Score = 0; 
 	private final int frameHeight = 600;
-	//private boolean powerUp = false;
-	//private int playerSpeed = 2;
 
 	public Model() {
 		//setup game world 
@@ -109,6 +102,7 @@ public class Model {
 		if(touchingPowerUp((int)Player.getCentre().getX(), (int)Player.getCentre().getY())) {
 			Player.setPowerUp(true);
 			Player.setTexture("res/miggeldy_on_bike.png");
+			Player.setWidth(45);
 			Player.setMAX_JUMP_TIME(Player.getMAX_JUMP_TIME()*2);
 			Player.setSpeed(Player.getSpeed()*2);
 			Player.setLives(Player.getLives()+1);
@@ -149,6 +143,9 @@ public class Model {
 		if((int) Player.getCentre().getY() > frameHeight) {
 			Player.setLives(Player.getLives()-1);
 			Player.setCentre(new Point3f(100,300,0));
+			if(Player.isPowerUp()) {
+				Player.setPowerUp(false);
+			}
 		}
 	}
 
@@ -196,6 +193,11 @@ public class Model {
 		// Reset jumpTime when the player lands on a platform
 		if (isOnPlatform((int) Player.getCentre().getX(), (int) Player.getCentre().getY())) {
 		    Player.setJumpTime(0);
+		}
+		
+		//Player not moving
+		if(!Player.isPowerUp() && (!Controller.getInstance().isKeyAPressed() && !Controller.getInstance().isKeyDPressed())) {
+		    Player.setTexture("res/miggeldy_standing.png");
 		}
 		
 		//Move Down

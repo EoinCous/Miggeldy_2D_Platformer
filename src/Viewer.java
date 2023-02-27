@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
+import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -47,12 +48,15 @@ SOFTWARE.
  */ 
 public class Viewer extends JPanel {
 	private long CurrentAnimationTime= 0;
-	private boolean levelDrawn = false;
+	private BufferedImage backBuffer;
+	private int frameHeight = 600;
+	private int frameWidth = 1000;
 	
 	Model gameworld =new Model(); 
 	 
 	public Viewer(Model World) {
 		this.gameworld=World;
+		backBuffer = new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_ARGB);
 	}
 
 	public Viewer(LayoutManager layout) {
@@ -76,22 +80,32 @@ public class Viewer extends JPanel {
 	}
 	
 	public void paintComponent(Graphics graphics) {
-		
-		super.paintComponent(graphics);
-		CurrentAnimationTime++; // runs animation time step 
-		
-		drawLevel(graphics);
-		/*
-		//Draw level once
-		if(!levelDrawn) {
-			drawLevel(graphics);
-			levelDrawn = true;
-		}*/
-		
-		//Draw player
-		drawPlayer(graphics);	
-	}
+        super.paintComponent(graphics);
+
+        // Get the graphics context for the back buffer
+        Graphics2D g2d = backBuffer.createGraphics();
+
+        CurrentAnimationTime++; // runs animation time step 
+
+        // Draw the background
+        drawBackground(g2d);
+
+        // Draw the level
+        drawLevel(g2d);
+
+        // Draw the player
+        drawPlayer(g2d);
+
+        // Draw the final image to the screen
+        graphics.drawImage(backBuffer, 0, 0, null);
+    }
 	
+	public void componentResized(ComponentEvent e) {
+	    // Recreate the back buffer with the new size
+	    backBuffer = new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_ARGB);
+	}
+
+
 	private void drawEnemies(int x, int y, int width, int height, String texture, Graphics g) {
 		File TextureToLoad = new File(texture);  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
 		try {
@@ -162,9 +176,6 @@ public class Viewer extends JPanel {
 	}
 	
 	private void drawLevel(Graphics graphics) {
-		
-		//Draw background 
-		drawBackground(graphics);
 				
 		//Draw power ups
 		List<GameObject> powerUps = gameworld.getCurrentLevel().getPowerUps();

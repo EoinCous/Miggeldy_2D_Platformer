@@ -10,7 +10,7 @@ public class Player extends GameObject{
 	private int jumpTimer = 0;
 	private int lives = 3;
 	private int score = 0; 
-	private final int width = 45;
+	private int width = 30;
 	private final int height = 45;
 	private boolean powerUp = false;
 	private int speed = 2;
@@ -44,6 +44,10 @@ public class Player extends GameObject{
 
 	public int getWidth() {
 		return width;
+	}
+	
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
 	public int getHeight() {
