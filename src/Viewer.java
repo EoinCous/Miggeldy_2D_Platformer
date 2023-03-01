@@ -99,11 +99,6 @@ public class Viewer extends JPanel {
         // Draw the final image to the screen
         graphics.drawImage(backBuffer, 0, 0, null);
     }
-	
-	public void componentResized(ComponentEvent e) {
-	    // Recreate the back buffer with the new size
-	    backBuffer = new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_ARGB);
-	}
 
 
 	private void drawEnemies(int x, int y, int width, int height, String texture, Graphics g) {

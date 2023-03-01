@@ -30,11 +30,6 @@ public class Platform {
 		g.fillRect(rect.x , rect.y, rect.width, rect.height);
 	}
 	
-	public void drawWithPlayersPosition(Graphics g, int x) {
-		g.setColor(color);
-		g.fillRect(rect.x - x, rect.y, rect.width, rect.height);
-	}
-	
 	public void setX(int x) {
 		rect.setLocation(x, y);
 	}

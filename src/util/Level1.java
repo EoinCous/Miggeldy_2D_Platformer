@@ -11,8 +11,6 @@ public class Level1 extends Level{
 	private List<GameObject> powerUps;
 	private GameObject checkpoint;
 	
-	private int cameraPosition;
-	
 	public Level1() {
 		//setup game world 
 		platforms = new ArrayList<>();
@@ -36,12 +34,6 @@ public class Level1 extends Level{
 	
 	public GameObject getCheckpoint() {
 		return checkpoint;
-	}
-	
-	public void updateCameraPosition(int x) {
-		for(Platform platform : platforms) {
-			platform.setX(cameraPosition);
-		}
 	}
 	
 	public void removePowerUp(GameObject powerUp) {

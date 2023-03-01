@@ -11,8 +11,6 @@ public class Level3 extends Level{
 	private List<GameObject> powerUps;
 	private GameObject checkpoint;
 	
-	private int cameraPosition;
-	
 	public Level3() {
 		//setup game world 
 				platforms = new ArrayList<>();
@@ -24,7 +22,7 @@ public class Level3 extends Level{
 				
 				//Platforms above ground
 				platforms.add(new Platform(300, 250, 100, 50, Color.red));
-				platforms.add(new Platform(600, 350, 100, 50, Color.red));
+				//platforms.add(new Platform(600, 350, 100, 50, Color.red));
 				platforms.add(new Platform(900, 300, 100, 50, Color.red));
 				platforms.add(new Platform(1200, 100, 100, 50, Color.red));
 				
@@ -45,12 +43,5 @@ public class Level3 extends Level{
 	public GameObject getCheckpoint() {
 		return checkpoint;
 	}
-	
-	public void updateCameraPosition(int x) {
-		for(Platform platform : platforms) {
-			platform.setX(cameraPosition);
-		}
-	}
-
 	
 }

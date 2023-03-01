@@ -1,4 +1,3 @@
-Paint the level once and only repaint the player
 Add limit to how long player can jump for
 Add a checkpoint image or new power up image
 Power up should give character extra speed/ jump height/ life

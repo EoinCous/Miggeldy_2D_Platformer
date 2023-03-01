@@ -10,6 +10,8 @@ import util.Level;
 import util.Level1;
 import util.Level2;
 import util.Level3;
+import util.Level4;
+import util.Level5;
 import util.Point3f;
 import util.Vector3f;
 import util.Platform;
@@ -91,6 +93,12 @@ public class Model {
 				case 2:
 					currentLevel = new Level3();
 					break;
+				case 3:
+					currentLevel = new Level4();
+					break;
+				case 4:
+					currentLevel = new Level5();
+					break;
 			}
 			Player.setCentre(new Point3f(100,300,0));
 			Player.setScore(+1);
@@ -129,14 +137,6 @@ public class Model {
 				}  
 			}
 		}
-	}
-	
-	//update the physical location of the platforms as the player moves position
-	private void platformLogic() {
-		for(Platform platform: currentLevel.getPlatforms()) {
-			//platform.setX(-(int) Player.getCentre().getX());
-			currentLevel.updateCameraPosition(-(int) Player.getCentre().getX());
-		}	
 	}
 	
 	private void deathLogic() {

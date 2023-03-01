@@ -23,12 +23,6 @@ public class Level {
 	public GameObject getCheckpoint() {
 		return checkpoint;
 	}
-	
-	public void updateCameraPosition(int x) {
-		for(Platform platform : platforms) {
-			platform.setX(cameraPosition);
-		}
-	}
 
 	public void removePowerUp(GameObject powerUp) {
 		powerUps.remove(powerUp);

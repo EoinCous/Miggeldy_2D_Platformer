@@ -4,14 +4,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-//Could also be called level1
 
 public class Level2 extends Level{
 	private List<Platform> platforms;
 	private List<GameObject> powerUps;
 	private GameObject checkpoint;
-	
-	private int cameraPosition;
 	
 	public Level2() {
 		//setup game world 
@@ -39,12 +36,6 @@ public class Level2 extends Level{
 	
 	public GameObject getCheckpoint() {
 		return checkpoint;
-	}
-	
-	public void updateCameraPosition(int x) {
-		for(Platform platform : platforms) {
-			platform.setX(cameraPosition);
-		}
 	}
 
 	
