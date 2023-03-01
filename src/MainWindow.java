@@ -58,12 +58,12 @@ public class MainWindow {
 	 private static JButton startMenuButton;
 	  
 	public MainWindow() {
-	    frame.setSize(1000, 600);  // you can customise this later and adapt it to change on size. 
+	    frame.setSize(613, 400);  // you can customise this later and adapt it to change on size. 
 	    frame.setResizable(false);
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //If exit // you can modify with your way of quitting , just is a template.
 	    frame.setLayout(null); 
 	    frame.add(canvas);  
-	    canvas.setBounds(0, 0, frame.getWidth(), frame.getHeight()); 
+	    canvas.setBounds(0, 0, 1000, 600); 
 		canvas.setBackground(new Color(255,255,255)); //white background  replaced by Space background but if you remove the background method this will draw a white screen 
 	    canvas.setVisible(false);   // this will become visible after you press the key. 
 		          
@@ -75,6 +75,7 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) { 
 				startMenuButton.setVisible(false);
 				BackgroundImageForStartMenu.setVisible(false); 
+				frame.setSize(1000, 600);
 				canvas.setVisible(true); 
 				canvas.addKeyListener(Controller);    //adding the controller to the Canvas  
 				canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .

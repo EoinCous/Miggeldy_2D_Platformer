@@ -1,13 +1,7 @@
-Add limit to how long player can jump for
 Add a checkpoint image or new power up image
-Power up should give character extra speed/ jump height/ life
-Recreate the platforms x position to move relative to the player position
-Store power-ups across the level which changes the players animation and speed / jump height
+
 Add enemies
-Find a better image for the startscreen and set the frame size to equal it
-Change the frame size when the player presses start (frameHeight, frameWidth)
-Give a end option to close the game
 
+Give an end option to close the game
 
-Draw the platforms based on the players position and update the x value of the platforms
-Update the x value of the platforms based on the players x position and draw the platforms
+Create a 2 player option

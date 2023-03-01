@@ -15,16 +15,26 @@ public class Player extends GameObject{
 	private boolean powerUp = false;
 	private int speed = 2;
 	
-	private Point3f centre= new Point3f(0,0,0);
-	private boolean hasTextured=false;
+	private Point3f centre = new Point3f(0,0,0);
+	private boolean hasTextured = false;
 	private String textureLocation; 
 	private String blanktexture="res/blankSprite.png";
 	
 	public Player(String textureLocation, Point3f centre) {
 		//super();
 		hasTextured=true;
-   	 	this.textureLocation=textureLocation;
-		this.centre =centre;
+   	 	this.textureLocation = textureLocation;
+		this.centre = centre;
+	}
+	
+	public void powerUp() {
+		powerUp = true;
+		textureLocation = "res/miggeldy_on_bike.png";
+		width = 45;
+		MAX_JUMP_TIME = 60;
+		//speed *= 2;
+		lives++;
+		score++;
 	}
 	
 	public void draw(int x, int y, int width, int height, String texture,Graphics g) {

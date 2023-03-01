@@ -7,9 +7,11 @@ import java.util.List;
 //Could also be called level1
 
 public class Level1 extends Level{
-	private List<Platform> platforms;
+	private List<Platform> platforms;    
+	private List<MovingPlatform> movingPlatforms;
 	private List<GameObject> powerUps;
 	private GameObject checkpoint;
+	//private boolean platformsMove = false;
 	
 	public Level1() {
 		//setup game world 
@@ -20,6 +22,8 @@ public class Level1 extends Level{
 
 		//Ground platforms
 		platforms.add(new Platform(0, 500, 1000, 100, Color.black));
+		
+		movingPlatforms = new ArrayList<>();
 		
 		checkpoint = new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(700, 450, 0));
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Level4 extends Level {
     private List<Platform> platforms;
+    private List<MovingPlatform> movingPlatforms;
     private List<GameObject> powerUps;
     private GameObject checkpoint;
 
@@ -40,4 +41,8 @@ public class Level4 extends Level {
     public GameObject getCheckpoint() {
         return checkpoint;
     }
+    
+    public void removePowerUp(GameObject powerUp) {
+		powerUps.remove(powerUp);
+	}
 }

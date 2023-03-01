@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-//Could also be called level1
 
 public class Level3 extends Level{
 	private List<Platform> platforms;
+    private List<MovingPlatform> movingPlatforms;
 	private List<GameObject> powerUps;
 	private GameObject checkpoint;
 	
@@ -44,4 +44,7 @@ public class Level3 extends Level{
 		return checkpoint;
 	}
 	
+	public void removePowerUp(GameObject powerUp) {
+		powerUps.remove(powerUp);
+	}
 }

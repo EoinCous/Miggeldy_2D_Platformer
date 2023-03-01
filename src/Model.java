@@ -12,6 +12,7 @@ import util.Level2;
 import util.Level3;
 import util.Level4;
 import util.Level5;
+import util.MovingPlatform;
 import util.Point3f;
 import util.Vector3f;
 import util.Platform;
@@ -77,65 +78,43 @@ public class Model {
 		//enemyLogic();
 		// Bullets move next 
 		//bulletLogic();
-		// interactions between objects 
-		//gameLogic(); 
 	   
 	}
 	
 	//Changes levels when player reaches a power up
 	private void levelLogic() {
 		if(touchingCheckpoint((int)Player.getCentre().getX(), (int)Player.getCentre().getY())) {
-			
+			level++;
 			switch(level) {
-				case 1:
+				case 2:
 					currentLevel = new Level2();
 					break;
-				case 2:
+				case 3:
 					currentLevel = new Level3();
 					break;
-				case 3:
+				case 4:
 					currentLevel = new Level4();
 					break;
-				case 4:
+				case 5:
 					currentLevel = new Level5();
 					break;
 			}
 			Player.setCentre(new Point3f(100,300,0));
 			Player.setScore(+1);
-			level++;
+			
 		}
+
+		if(level == 5) {
+			for(MovingPlatform movingPlatform : currentLevel.getMovingPlatforms()) {
+			movingPlatform.update();
+			}
+		}
+		
 	}
 	
 	private void powerUpLogic() {
 		if(touchingPowerUp((int)Player.getCentre().getX(), (int)Player.getCentre().getY())) {
-			Player.setPowerUp(true);
-			Player.setTexture("res/miggeldy_on_bike.png");
-			Player.setWidth(45);
-			Player.setMAX_JUMP_TIME(Player.getMAX_JUMP_TIME()*2);
-			Player.setSpeed(Player.getSpeed()*2);
-			Player.setLives(Player.getLives()+1);
-			Player.setScore(Player.getScore()+1);
-		}
-	}
-
-	private void gameLogic() { 
-		
-		// this is a way to increment across the array list data structure 
-		
-		//see if they hit anything 
-		// using enhanced for-loop style as it makes it alot easier both code wise and reading wise too 
-		for (GameObject temp : EnemiesList) 
-		{
-			for (GameObject Bullet : BulletList) 
-			{
-				if ( Math.abs(temp.getCentre().getX()- Bullet.getCentre().getX())< temp.getWidth() 
-					&& Math.abs(temp.getCentre().getY()- Bullet.getCentre().getY()) < temp.getHeight())
-				{
-					EnemiesList.remove(temp);
-					BulletList.remove(Bullet);
-					Player.setScore(+1);
-				}  
-			}
+			Player.powerUp();
 		}
 	}
 	
@@ -158,7 +137,7 @@ public class Model {
 		//check for movement and if you fired a bullet 
 		
 		//Collision detection gravity
-		if(!isOnPlatform(playerX, playerY) || (!isOnPlatform(playerX, playerY) && Player.getJumpTimer() == 0)) {
+		if(!platformCollision(playerX, playerY) || (!platformCollision(playerX, playerY) && Player.getJumpTimer() == 0)) {
 			Player.getCentre().ApplyVector( new Vector3f(0,-Player.getSpeed(),0));
 		}else {
 			//create increment && derement methods
@@ -166,7 +145,7 @@ public class Model {
 		}
 		
 		//Move left if not colliding with a platform
-		if(Controller.getInstance().isKeyAPressed() && !isOnPlatform(playerX, playerY - (Player.getHeight()/16))){
+		if(Controller.getInstance().isKeyAPressed() && !platformCollision(playerX, playerY - (Player.getHeight()/16))){
 			Player.getCentre().ApplyVector( new Vector3f(-Player.getSpeed(),0,0)); 
 			if(!Player.isPowerUp()) {
 				Player.setTexture("res/miggeldy_running_l.png");
@@ -174,7 +153,7 @@ public class Model {
 		}
 		
 		//Move right if not colliding with a platform
-		if(Controller.getInstance().isKeyDPressed() && !isOnPlatform(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/16))){
+		if(Controller.getInstance().isKeyDPressed() && !platformCollision(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/16))){
 			Player.getCentre().ApplyVector( new Vector3f(Player.getSpeed(),0,0)); 
 			if(!Player.isPowerUp()) {
 				Player.setTexture("res/miggeldy_running.png");
@@ -182,7 +161,7 @@ public class Model {
 		}
 			
 		//Jump if head is not colliding with a platform
-		if(Controller.getInstance().isKeyWPressed() && !isOnPlatform(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/8))){
+		if(Controller.getInstance().isKeyWPressed() && !platformCollision(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/8))){
 			if(Player.getJumpTime() < Player.getMAX_JUMP_TIME()) {
 				Player.getCentre().ApplyVector( new Vector3f(0,5,0));	
 				Player.setJumpTime(Player.getJumpTime()+1);
@@ -191,7 +170,7 @@ public class Model {
 		}	
 		
 		// Reset jumpTime when the player lands on a platform
-		if (isOnPlatform((int) Player.getCentre().getX(), (int) Player.getCentre().getY())) {
+		if (platformCollision((int) Player.getCentre().getX(), (int) Player.getCentre().getY())) {
 		    Player.setJumpTime(0);
 		}
 		
@@ -236,8 +215,8 @@ public class Model {
 	}
 	
 	public void jumping(int playerX, int playerY) {
-		if(!isOnPlatform(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/8))) {
-			if(Player.getJumpTime() < Player.getMAX_JUMP_TIME()) {
+		if(!platformCollision(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/8))) {
+			if(Player.getJumpTime() < util.Player.getMAX_JUMP_TIME()) {
 				Player.getCentre().ApplyVector( new Vector3f(0,5,0));	
 				Player.setJumpTime(Player.getJumpTime()+1);
 			}
@@ -245,15 +224,27 @@ public class Model {
 		
 	}
 	
-	private boolean isOnPlatform(int x, int y) {
+	private boolean platformCollision(int x, int y) {
 	    // loop through each platform and check for collisions
-	    for (Platform platform : currentLevel.getPlatforms()) {
+		List<MovingPlatform> movingPlatforms = currentLevel.getMovingPlatforms();
+		List<Platform> platforms = currentLevel.getPlatforms();
+	    for (Platform platform : platforms) {
 	        Rectangle playerBounds = new Rectangle(x, y, Player.getWidth(), Player.getHeight());
 	        Rectangle platformBounds = platform.getBounds();
 	        if (playerBounds.intersects(platformBounds)) {
 	            return true;
 	        }
 	    }
+	    if(currentLevel.isPlatformsMove()){
+	    	for (Platform platform : movingPlatforms) {
+	        Rectangle playerBounds = new Rectangle(x, y, Player.getWidth(), Player.getHeight());
+	        Rectangle platformBounds = platform.getBounds();
+	        if (playerBounds.intersects(platformBounds)) {
+	            return true;
+	        }
+	    }
+	    }
+	    
 	    return false;
 	}
 	
@@ -299,6 +290,10 @@ public class Model {
 	
 	public Level getCurrentLevel() {
 		return currentLevel;
+	}
+	
+	public int getLevel() {
+		return level;
 	}
 	
 	public void resetGame() {

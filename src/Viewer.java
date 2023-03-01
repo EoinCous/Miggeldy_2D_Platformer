@@ -17,8 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import util.GameObject;
+import util.MovingPlatform;
 import util.Platform;
-
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -174,14 +174,24 @@ public class Viewer extends JPanel {
 				
 		//Draw power ups
 		List<GameObject> powerUps = gameworld.getCurrentLevel().getPowerUps();
-		for(GameObject powerUp : powerUps) {
+		if(!powerUps.isEmpty()) {
+			for(GameObject powerUp : powerUps) {
 			powerUp.draw((int)powerUp.getCentre().getX(), (int)powerUp.getCentre().getY(), 50, 50, powerUp.getTexture(), graphics);
+			}
 		}
 		
 		//Draw platforms
 		List<Platform> platforms = gameworld.getCurrentLevel().getPlatforms();
 		for(Platform platform : platforms) {
 			platform.draw(graphics);
+		}
+		
+		//Draw moving platforms
+		if(gameworld.getLevel() == 5) {
+			List<MovingPlatform> movingPlatforms = gameworld.getCurrentLevel().getMovingPlatforms();
+			for(MovingPlatform movingPlatform : movingPlatforms) {
+				movingPlatform.draw(graphics);
+			}
 		}
 		
 		GameObject checkpoint = gameworld.getCurrentLevel().getCheckpoint();

@@ -6,11 +6,11 @@ import java.awt.Rectangle;
 
 public class Platform {
 	private Rectangle rect;
-	private Color color;
+	protected Color color;
 	private int x;
-	private int y;
-	private int width;
-	private int height;
+	protected int y;
+	protected int width;
+	protected int height;
 	
 	public Platform(int x, int y, int width, int height, Color color) {
 		this.x = x;
@@ -31,7 +31,7 @@ public class Platform {
 	}
 	
 	public void setX(int x) {
-		rect.setLocation(x, y);
+		this.x = x;
 	}
 	
 	public int getX() {

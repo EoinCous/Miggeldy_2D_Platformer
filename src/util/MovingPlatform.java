@@ -1,6 +1,7 @@
 package util;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 public class MovingPlatform extends Platform{
 	private int startX;
@@ -13,6 +14,7 @@ public class MovingPlatform extends Platform{
 		this.startX = startX;
 		this.endX = endX;
 		this.speed = speed;
+		movingRight = true;
 	}
 	
 	public void update() {
@@ -27,6 +29,12 @@ public class MovingPlatform extends Platform{
                 movingRight = true;
             }
         }
+    }
+	
+	@Override
+    public void draw(Graphics g) {
+        g.setColor(color);
+        g.fillRect(getX(), y, width, height);
     }
 
 }
