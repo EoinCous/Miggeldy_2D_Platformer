@@ -1,6 +1,10 @@
-package util;
+package levels;
 
 import java.util.List;
+
+import util.GameObject;
+import util.MovingPlatform;
+import util.Platform;
 
 public class Level {
 	private List<Platform> platforms;

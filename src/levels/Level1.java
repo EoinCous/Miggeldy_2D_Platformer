@@ -1,8 +1,13 @@
-package util;
+package levels;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+
+import util.GameObject;
+import util.MovingPlatform;
+import util.Platform;
+import util.Point3f;
 
 //Could also be called level1
 
@@ -18,7 +23,6 @@ public class Level1 extends Level{
 		platforms = new ArrayList<>();
 		
 		powerUps = new ArrayList<>();
-		powerUps.add(new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(300, 350, 0)));
 
 		//Ground platforms
 		platforms.add(new Platform(0, 500, 1000, 100, Color.black));

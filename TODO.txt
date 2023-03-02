@@ -4,4 +4,5 @@ Add enemies
 
 Give an end option to close the game
 
-Create a 2 player option
+Create more difficult levels
+

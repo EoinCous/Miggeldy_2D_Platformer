@@ -19,6 +19,7 @@ import javax.swing.Timer;
 import util.GameObject;
 import util.MovingPlatform;
 import util.Platform;
+import util.Player;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -51,12 +52,24 @@ public class Viewer extends JPanel {
 	private BufferedImage backBuffer;
 	private int frameHeight = 600;
 	private int frameWidth = 1000;
+	private boolean multiplayer = false;
+	private Player player;
+	private Player[] players;
 	
 	Model gameworld =new Model(); 
 	 
 	public Viewer(Model World) {
 		this.gameworld=World;
 		backBuffer = new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_ARGB);
+		
+		
+		if(!gameworld.isMultiplayer()) {
+			player = gameworld.getPlayer();
+		}else {
+			players = gameworld.getPlayers();
+			multiplayer = true;
+		}
+		
 	}
 
 	public Viewer(LayoutManager layout) {
@@ -94,7 +107,14 @@ public class Viewer extends JPanel {
         drawLevel(g2d);
 
         // Draw the player
-        drawPlayer(g2d);
+        if(!multiplayer) {
+        	drawPlayer(g2d, player);
+        }else {
+        	for(Player player : players) {
+        		drawPlayer(g2d, player);
+        	}
+        }
+        
 
         // Draw the final image to the screen
         graphics.drawImage(backBuffer, 0, 0, null);
@@ -122,8 +142,6 @@ public class Viewer extends JPanel {
 		File TextureToLoad = new File("res/misty_background_long.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
 		try {
 			Image myImage = ImageIO.read(TextureToLoad); 
-			//g.drawImage(myImage, -cameraPosition, 0, null);
-			//g.drawImage(myImage, 0, 0, null); 
 			//update position of level based on position of player.x
 			g.drawImage(myImage, - (int) gameworld.getPlayer().getCentre().getX(), 0, null);
 			
@@ -148,24 +166,19 @@ public class Viewer extends JPanel {
 	}
 	
 
-	private void drawPlayer(Graphics g) { 
+	private void drawPlayer(Graphics g, Player player) { 
 		//Draw player Game Object 
-		int x = (int) gameworld.getPlayer().getCentre().getX();
-		int y = (int) gameworld.getPlayer().getCentre().getY();
-		int width = (int) gameworld.getPlayer().getWidth();
-		int height = (int) gameworld.getPlayer().getHeight();
-		String texture = gameworld.getPlayer().getTexture();
+		int x = (int) player.getCentre().getX();
+		int y = (int) player.getCentre().getY();
+		int width = (int) player.getWidth();
+		int height = (int) player.getHeight();
+		String texture = player.getTexture();
 		File TextureToLoad = new File(texture);  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
 		try {
 			Image myImage = ImageIO.read(TextureToLoad);
-			//The spirte is 32x32 pixel wide and 4 of them are placed together so we need to grab a different one each time 
-			//remember your training :-) computer science everything starts at 0 so 32 pixels gets us to 31  
-			//int currentPositionInAnimation= ((int) ((CurrentAnimationTime%40)/10))*32; //slows down animation so every 10 frames we get another frame so every 100ms 
-			//g.drawImage(myImage, x,y, x+width, y+height, currentPositionInAnimation  , 0, currentPositionInAnimation+31, 32, null); 
 			g.drawImage(myImage, x, y, width, height, this);
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 	}

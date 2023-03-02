@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import levels.Level;
+import levels.Level1;
+import levels.Level2;
+import levels.Level3;
+import levels.Level4;
+import levels.Level5;
+import levels.Level6;
 import util.GameObject;
-import util.Level;
-import util.Level1;
-import util.Level2;
-import util.Level3;
-import util.Level4;
-import util.Level5;
 import util.MovingPlatform;
 import util.Point3f;
 import util.Vector3f;
@@ -44,12 +45,14 @@ SOFTWARE.
 public class Model {
 	
 	private Player Player;
+	private Player Player2;
 	private Controller controller = Controller.getInstance();
 	private CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
 	private CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
 	private Level currentLevel;
 	private int level = 1;
 	private final int frameHeight = 600;
+	private boolean multiplayer = false;
 
 	public Model() {
 		//setup game world 
@@ -59,26 +62,46 @@ public class Model {
 		
 		//Player 
 		Player = new Player("res/miggeldy_standing.png",new Point3f(50,300,0));
+		
 	}
 	
-	// This is the heart of the game , where the model takes in all the inputs ,decides the outcomes and then changes the model accordingly. 
-	public void gamelogic() 
-	{
-		//Level logic first
-		levelLogic();
-		// Player Logic first 
-		playerLogic(); 
-		//Ground Logic
-		//platformLogic();
-		//Player death logic
-		deathLogic();
+	public Model(boolean multiplayer) {
+		//setup game world 
 		
-		powerUpLogic();
-		// Enemy Logic next
-		//enemyLogic();
-		// Bullets move next 
-		//bulletLogic();
-	   
+		this.multiplayer = multiplayer;
+		
+		//Level 1
+		currentLevel = new Level6();
+		
+		//Player 
+		Player = new Player("res/miggeldy_standing.png",new Point3f(50,300,0));
+		
+		Player2 = new Player("res/miggeldy_standing.png",new Point3f(100,300,0));
+		
+	}
+	
+	public void gamemode() {
+		levelLogic();
+		
+		if(!multiplayer) {
+			playerLogic(Player);
+			gamelogic(Player);
+			
+		}else {
+			playerLogic(Player);
+			player2Logic(Player2);
+			gamelogic(Player);
+			gamelogic(Player2);
+			
+		}
+	}
+	
+	public void gamelogic(Player player) {
+		
+		deathLogic(player);
+		
+		powerUpLogic(player);
+		
 	}
 	
 	//Changes levels when player reaches a power up
@@ -98,8 +121,14 @@ public class Model {
 				case 5:
 					currentLevel = new Level5();
 					break;
+				case 6:
+					currentLevel = new Level6();
+					break;
 			}
-			Player.setCentre(new Point3f(100,300,0));
+			Player.setCentre(new Point3f(50,300,0));
+			if(multiplayer) {
+				Player2.setCentre(new Point3f(100,300,0));
+			}
 			Player.setScore(+1);
 			
 		}
@@ -112,106 +141,146 @@ public class Model {
 		
 	}
 	
-	private void powerUpLogic() {
-		if(touchingPowerUp((int)Player.getCentre().getX(), (int)Player.getCentre().getY())) {
-			Player.powerUp();
+	private void powerUpLogic(Player player) {
+		if(touchingPowerUp((int)player.getCentre().getX(), (int)player.getCentre().getY())) {
+			player.powerUp();
 		}
 	}
 	
-	private void deathLogic() {
-		if((int) Player.getCentre().getY() > frameHeight) {
-			Player.setLives(Player.getLives()-1);
-			Player.setCentre(new Point3f(100,300,0));
-			if(Player.isPowerUp()) {
-				Player.setPowerUp(false);
+	private void deathLogic(Player player) {
+		if((int) player.getCentre().getY() > frameHeight) {
+			player.setLives(Player.getLives()-1);
+			if(!multiplayer) {
+				player.setCentre(new Point3f(100,300,0));
+			}else {
+				Player.setCentre(new Point3f(50,300,0));
+				Player2.setCentre(new Point3f(100,300,0));
+			}
+			if(player.isPowerUp()) {
+				player.powerDown();
 			}
 		}
 	}
 
-	private void playerLogic() {
+	private void playerLogic(Player player) {
 		
-		int playerX = (int) Player.getCentre().getX();
-		int playerY = (int) Player.getCentre().getY();
+		int playerX = (int) player.getCentre().getX();
+		int playerY = (int) player.getCentre().getY();
 		// smoother animation is possible if we make a target position  // done but may try to change things for students  
 		 
 		//check for movement and if you fired a bullet 
 		
 		//Collision detection gravity
-		if(!platformCollision(playerX, playerY) || (!platformCollision(playerX, playerY) && Player.getJumpTimer() == 0)) {
-			Player.getCentre().ApplyVector( new Vector3f(0,-Player.getSpeed(),0));
+		if(!platformCollision(playerX, playerY) || (!platformCollision(playerX, playerY) && player.getJumpTimer() == 0)) {
+			player.getCentre().ApplyVector( new Vector3f(0,-player.getSpeed(),0));
 		}else {
 			//create increment && derement methods
-			Player.setJumpTimer(Player.getJumpTimer()-1);
+			player.setJumpTimer(player.getJumpTimer()-1);
 		}
 		
 		//Move left if not colliding with a platform
-		if(Controller.getInstance().isKeyAPressed() && !platformCollision(playerX, playerY - (Player.getHeight()/16))){
-			Player.getCentre().ApplyVector( new Vector3f(-Player.getSpeed(),0,0)); 
-			if(!Player.isPowerUp()) {
-				Player.setTexture("res/miggeldy_running_l.png");
+		if(Controller.getInstance().isKeyAPressed() && !platformCollision(playerX, playerY - (player.getHeight()/16))){
+			player.getCentre().ApplyVector( new Vector3f(-player.getSpeed(),0,0)); 
+			if(!player.isPowerUp()) {
+				player.setTexture("res/miggeldy_running_l.png");
 			}
 		}
 		
 		//Move right if not colliding with a platform
-		if(Controller.getInstance().isKeyDPressed() && !platformCollision(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/16))){
-			Player.getCentre().ApplyVector( new Vector3f(Player.getSpeed(),0,0)); 
-			if(!Player.isPowerUp()) {
-				Player.setTexture("res/miggeldy_running.png");
+		if(Controller.getInstance().isKeyDPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/16))){
+			player.getCentre().ApplyVector( new Vector3f(player.getSpeed(),0,0)); 
+			if(!player.isPowerUp()) {
+				player.setTexture("res/miggeldy_running.png");
 			}
 		}
 			
 		//Jump if head is not colliding with a platform
-		if(Controller.getInstance().isKeyWPressed() && !platformCollision(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/8))){
-			if(Player.getJumpTime() < Player.getMAX_JUMP_TIME()) {
-				Player.getCentre().ApplyVector( new Vector3f(0,5,0));	
-				Player.setJumpTime(Player.getJumpTime()+1);
-				Player.setJumpTimer(20);
+		if(Controller.getInstance().isKeyWPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8))){
+			if(player.getJumpTime() < player.getMAX_JUMP_TIME()) {
+				player.getCentre().ApplyVector( new Vector3f(0,5,0));	
+				player.setJumpTime(player.getJumpTime()+1);
+				player.setJumpTimer(20);
 			}
 		}	
 		
 		// Reset jumpTime when the player lands on a platform
-		if (platformCollision((int) Player.getCentre().getX(), (int) Player.getCentre().getY())) {
-		    Player.setJumpTime(0);
+		if (platformCollision((int) player.getCentre().getX(), (int) player.getCentre().getY())) {
+		    player.setJumpTime(0);
 		}
 		
 		//Player not moving
-		if(!Player.isPowerUp() && (!Controller.getInstance().isKeyAPressed() && !Controller.getInstance().isKeyDPressed())) {
-		    Player.setTexture("res/miggeldy_standing.png");
+		if(!player.isPowerUp() && (!Controller.getInstance().isKeyAPressed() && !Controller.getInstance().isKeyDPressed())) {
+		    player.setTexture("res/miggeldy_standing.png");
+		}
+	}
+	
+private void player2Logic(Player player) {
+		
+		int playerX = (int) player.getCentre().getX();
+		int playerY = (int) player.getCentre().getY();
+		// smoother animation is possible if we make a target position  // done but may try to change things for students  
+		 
+		//check for movement and if you fired a bullet 
+		
+		//Collision detection gravity
+		if(!platformCollision(playerX, playerY) || (!platformCollision(playerX, playerY) && player.getJumpTimer() == 0)) {
+			player.getCentre().ApplyVector( new Vector3f(0,-player.getSpeed(),0));
+		}else {
+			//create increment && derement methods
+			player.setJumpTimer(player.getJumpTimer()-1);
 		}
 		
-		//Move Down
-		//if(Controller.getInstance().isKeySPressed()){Player.getCentre().ApplyVector( new Vector3f(0,-2,0));}
+		//Move left if not colliding with a platform
+		if(Controller.getInstance().isKeyLEFTPressed() && !platformCollision(playerX, playerY - (player.getHeight()/16))){
+			player.getCentre().ApplyVector( new Vector3f(-player.getSpeed(),0,0)); 
+			if(!player.isPowerUp()) {
+				player.setTexture("res/miggeldy_running_l.png");
+			}
+		}
 		
-		if(Controller.getInstance().isKeySpacePressed())
-		{
-			CreateBullet();
-			Controller.getInstance().setKeySpacePressed(false);
-		} 
-	}
-
-	private void bulletLogic() {
-		// TODO Auto-generated method stub
-		// move bullets 
-	  
-		for (GameObject temp : BulletList){
-		    //check to move them
-			  
-			temp.getCentre().ApplyVector(new Vector3f(0,1,0));
-			//see if they hit anything 
+		//Move right if not colliding with a platform
+		if(Controller.getInstance().isKeyRIGHTPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/16))){
+			player.getCentre().ApplyVector( new Vector3f(player.getSpeed(),0,0)); 
+			if(!player.isPowerUp()) {
+				player.setTexture("res/miggeldy_running.png");
+			}
+		}
 			
-			//see if they get to the top of the screen ( remember 0 is the top 
-			if (temp.getCentre().getY()==0){
-			 	BulletList.remove(temp);
-			} 
-		} 
+		//Jump if head is not colliding with a platform
+		if(Controller.getInstance().isKeyUPPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8))){
+			if(player.getJumpTime() < player.getMAX_JUMP_TIME()) {
+				player.getCentre().ApplyVector( new Vector3f(0,5,0));	
+				player.setJumpTime(player.getJumpTime()+1);
+				player.setJumpTimer(20);
+			}
+		}	
+		
+		// Reset jumpTime when the player lands on a platform
+		if (platformCollision((int) player.getCentre().getX(), (int) player.getCentre().getY())) {
+		    player.setJumpTime(0);
+		}
+		
+		//Player not moving
+		if(!player.isPowerUp() && (!Controller.getInstance().isKeyLEFTPressed() && !Controller.getInstance().isKeyRIGHTPressed())) {
+		    player.setTexture("res/miggeldy_standing.png");
+		}
 	}
 	
 	private void CreateBullet() {
 		BulletList.add(new GameObject("res/Guinness_transparent.png",32,64,new Point3f(Player.getCentre().getX(),Player.getCentre().getY(),0.0f)));
 	}
 
-	public GameObject getPlayer() {
+	public Player getPlayer() {
 		return Player;
+	}
+	
+	public boolean isMultiplayer() {
+		return multiplayer;
+	}
+	
+	public Player[] getPlayers() {
+		Player[] players = {Player, Player2};
+		return players;
 	}
 	
 	public void jumping(int playerX, int playerY) {
@@ -270,6 +339,11 @@ public class Model {
             return true;
         }
 	    return false;
+	}
+	
+	public void multiplayer() {
+		Player = new Player("res/miggeldy_standing.png",new Point3f(50,300,0));
+		
 	}
 
 	public CopyOnWriteArrayList<GameObject> getEnemies() {

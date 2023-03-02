@@ -37,6 +37,12 @@ public class Player extends GameObject{
 		score++;
 	}
 	
+	public void powerDown() {
+		powerUp = false;
+		MAX_JUMP_TIME = 30;
+		width = 30;
+	}
+	
 	public void draw(int x, int y, int width, int height, String texture,Graphics g) {
 		super.draw(x, y, width, height, texture, g);
 	}

@@ -49,31 +49,63 @@ SOFTWARE.
 
 public class MainWindow {
 	 private static JFrame frame = new JFrame("Game");   // Change to the name of your game 
-	 private static Model gameworld= new Model();
-	 private static Viewer canvas = new  Viewer(gameworld);
-	 private static KeyListener Controller =new Controller()  ; 
+	 //private static Model gameworld= new Model();
+	 private static Model gameworld;
+	 //private static Viewer canvas = new  Viewer(gameworld);
+	 private static Viewer canvas;
+	 private static KeyListener Controller =new Controller(); 
 	 private static int TargetFPS = 100;
 	 private static boolean startGame = false; 
 	 private static JLabel BackgroundImageForStartMenu ;
 	 private static JButton startMenuButton;
+	 private static JButton singlePlayerButton;
+	 private static JButton multiplayerButton;
 	  
 	public MainWindow() {
-	    frame.setSize(613, 400);  // you can customise this later and adapt it to change on size. 
+	    frame.setSize(613, 400); 
 	    frame.setResizable(false);
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //If exit // you can modify with your way of quitting , just is a template.
 	    frame.setLayout(null); 
-	    frame.add(canvas);  
-	    canvas.setBounds(0, 0, 1000, 600); 
-		canvas.setBackground(new Color(255,255,255)); //white background  replaced by Space background but if you remove the background method this will draw a white screen 
-	    canvas.setVisible(false);   // this will become visible after you press the key. 
-		          
-		       
-        startMenuButton = new JButton("Start Game");  // start button 
-        startMenuButton.addActionListener(new ActionListener()
+	    
+		//Singleplayer       
+        singlePlayerButton = new JButton("Single Player"); 
+        singlePlayerButton.addActionListener(new ActionListener()
            { 
 			@Override
 			public void actionPerformed(ActionEvent e) { 
-				startMenuButton.setVisible(false);
+				gameworld = new Model();
+				canvas = new  Viewer(gameworld);
+				frame.add(canvas); 
+				canvas.setBounds(0, 0, 1000, 600); 
+				canvas.setBackground(new Color(255,255,255));  
+			    canvas.setVisible(false);   
+				singlePlayerButton.setVisible(false);
+				multiplayerButton.setVisible(false);
+				BackgroundImageForStartMenu.setVisible(false); 
+				frame.setSize(1000, 600);
+				canvas.setVisible(true); 
+				canvas.addKeyListener(Controller);    //adding the controller to the Canvas  
+				canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .
+				startGame=true;
+				
+			}});  
+        int buttonWidth = 40;
+        singlePlayerButton.setBounds(frame.getWidth()/2 - (buttonWidth*2), frame.getHeight()/4, 200, buttonWidth); 
+        
+        //Multiplayer
+        multiplayerButton = new JButton("Multiplayer");  // start button 
+        multiplayerButton.addActionListener(new ActionListener()
+           { 
+			@Override
+			public void actionPerformed(ActionEvent e) { 
+				gameworld = new Model(true);
+				canvas = new  Viewer(gameworld);
+				frame.add(canvas); 
+				canvas.setBounds(0, 0, 1000, 600); 
+				canvas.setBackground(new Color(255,255,255));  
+			    canvas.setVisible(false); 
+			    singlePlayerButton.setVisible(false);
+				multiplayerButton.setVisible(false);
 				BackgroundImageForStartMenu.setVisible(false); 
 				frame.setSize(1000, 600);
 				canvas.setVisible(true); 
@@ -81,8 +113,7 @@ public class MainWindow {
 				canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .
 				startGame=true;
 			}});  
-        int buttonWidth = 40;
-        startMenuButton.setBounds(frame.getWidth()/2 - (buttonWidth*2), frame.getHeight()/2, 200, buttonWidth); 
+        multiplayerButton.setBounds(frame.getWidth()/2 - (buttonWidth*2), frame.getHeight()/2, 200, buttonWidth); 
         
         //loading background image 
         File BackgroundToLoad = new File("res/Miggeldy_Menu.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
@@ -98,7 +129,8 @@ public class MainWindow {
 			e.printStackTrace();
 		}   
 		
-		frame.add(startMenuButton);  
+		frame.add(singlePlayerButton);  
+		frame.add(multiplayerButton);
         frame.setVisible(true);   
 	}
 
@@ -134,7 +166,7 @@ public class MainWindow {
 		//pauseOption();
 		
 		// model update   
-		gameworld.gamelogic();
+		gameworld.gamemode();
 		
 		// view update 
 		canvas.updateview(); 
@@ -156,7 +188,8 @@ public class MainWindow {
 		   canvas.setVisible(false); // hide the canvas
 		   canvas.removeKeyListener(Controller); // remove the controller from the canvas
 		   BackgroundImageForStartMenu.setVisible(true); // show the background image for the start menu
-		   startMenuButton.setVisible(true); // show the start menu button
+		   singlePlayerButton.setVisible(true); 
+		   multiplayerButton.setVisible(true);
 		}
 
 }

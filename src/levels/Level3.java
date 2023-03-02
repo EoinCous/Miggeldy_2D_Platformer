@@ -1,30 +1,35 @@
-package util;
+package levels;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.GameObject;
+import util.MovingPlatform;
+import util.Platform;
+import util.Point3f;
 
-public class Level2 extends Level{
+
+public class Level3 extends Level{
 	private List<Platform> platforms;
     private List<MovingPlatform> movingPlatforms;
 	private List<GameObject> powerUps;
 	private GameObject checkpoint;
 	
-	public Level2() {
+	public Level3() {
 		//setup game world 
 				platforms = new ArrayList<>();
 				//Ground platforms
-				platforms.add(new Platform(0, 500, 300, 100, Color.black));
-				platforms.add(new Platform(400, 500, 100, 100, Color.black));
-				platforms.add(new Platform(500, 450, 200, 150, Color.black));
-				platforms.add(new Platform(700, 400, 200, 200, Color.black));
-				platforms.add(new Platform(900, 500, 1100, 100, Color.black));
+				platforms.add(new Platform(0, 500, 500, 100, Color.black));
+				platforms.add(new Platform(800, 500, 200, 150, Color.black));
+				
+				//Platforms above ground
+				platforms.add(new Platform(600, 400, 100, 20, Color.red));
 				
 				powerUps = new ArrayList<>();
+				powerUps.add(new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(300, 350, 0)));
 				
 				checkpoint = new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(900, 450, 0));
-				//powerUps.add(new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(600, 300, 0)));
 	}
 	
 	public List<Platform> getPlatforms(){
@@ -38,6 +43,8 @@ public class Level2 extends Level{
 	public GameObject getCheckpoint() {
 		return checkpoint;
 	}
-
 	
+	public void removePowerUp(GameObject powerUp) {
+		powerUps.remove(powerUp);
+	}
 }

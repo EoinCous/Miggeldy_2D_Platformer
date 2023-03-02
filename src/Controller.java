@@ -32,10 +32,12 @@ SOFTWARE.
 public class Controller implements KeyListener {
         
 	   private static boolean KeyAPressed= false;
-	   private static boolean KeySPressed= false;
 	   private static boolean KeyDPressed= false;
 	   private static boolean KeyWPressed= false;
-	   private static boolean KeySpacePressed= false;
+	   
+	   private static boolean KeyUPPressed= false;
+	   private static boolean KeyRIGHTPressed= false;
+	   private static boolean KeyLEFTPressed= false;
 	   
 	   private static final Controller instance = new Controller();
 	   
@@ -51,17 +53,20 @@ public class Controller implements KeyListener {
 	public void keyTyped(KeyEvent e) { 
 		 
 	}
-
+	
 	@Override
 	public void keyPressed(KeyEvent e) 
 	{ 
-		switch (e.getKeyChar()) 
+		 switch (e.getKeyCode())
 		{
-			case 'a':setKeyAPressed(true);break;  
-			case 's':setKeySPressed(true);break;
-			case 'w':setKeyWPressed(true);break;
-			case 'd':setKeyDPressed(true);break;
-			case ' ':setKeySpacePressed(true);break;   
+			//Player1
+			case 65:setKeyAPressed(true);break;  
+			case 87:setKeyWPressed(true);break;
+			case 68:setKeyDPressed(true);break;
+			//Player2
+			case 37:setKeyLEFTPressed(true);break; 
+			case 38:setKeyUPPressed(true);break;
+			case 39:setKeyRIGHTPressed(true);break;
 		    default:
 		    	//System.out.println("Controller test:  Unknown key pressed");
 		        break;
@@ -70,17 +75,19 @@ public class Controller implements KeyListener {
 	 // You can implement to keep moving while pressing the key here . 
 		
 	}
-
+	
 	@Override
 	public void keyReleased(KeyEvent e) 
 	{ 
-		switch (e.getKeyChar()) 
+		switch (e.getKeyCode()) 
 		{
-			case 'a':setKeyAPressed(false);break;  
-			case 's':setKeySPressed(false);break;
-			case 'w':setKeyWPressed(false);break;
-			case 'd':setKeyDPressed(false);break;
-			case ' ':setKeySpacePressed(false);break;   
+			case 65:setKeyAPressed(false);break;  
+			case 87:setKeyWPressed(false);break;
+			case 68:setKeyDPressed(false);break; 
+			
+			case 37:setKeyLEFTPressed(false);break;  
+			case 38:setKeyUPPressed(false);break;
+			case 39:setKeyRIGHTPressed(false);break;
 		    default:
 		    	//System.out.println("Controller test:  Unknown key pressed");
 		        break;
@@ -97,16 +104,6 @@ public class Controller implements KeyListener {
 
 	public void setKeyAPressed(boolean keyAPressed) {
 		KeyAPressed = keyAPressed;
-	}
-
-
-	public boolean isKeySPressed() {
-		return KeySPressed;
-	}
-
-
-	public void setKeySPressed(boolean keySPressed) {
-		KeySPressed = keySPressed;
 	}
 
 
@@ -127,19 +124,38 @@ public class Controller implements KeyListener {
 
 	public void setKeyWPressed(boolean keyWPressed) {
 		KeyWPressed = keyWPressed;
+	}	
+	
+	
+
+	//Player 2 controls
+	public void setKeyUPPressed(boolean keyUPPressed) {
+		KeyUPPressed = keyUPPressed;
 	}
 
 
-	public boolean isKeySpacePressed() {
-		return KeySpacePressed;
+	public boolean isKeyUPPressed() {
+		return KeyUPPressed;
 	}
 
 
-	public void setKeySpacePressed(boolean keySpacePressed) {
-		KeySpacePressed = keySpacePressed;
+	public void setKeyRIGHTPressed(boolean keyRIGHTPressed) {
+		KeyRIGHTPressed = keyRIGHTPressed;
+	}
+
+
+	public boolean isKeyRIGHTPressed() {
+		return KeyRIGHTPressed;
+	}
+
+
+	public void setKeyLEFTPressed(boolean keyLEFTPressed) {
+		KeyLEFTPressed = keyLEFTPressed;
 	} 
 	
-	 
+	 public boolean isKeyLEFTPressed() {
+		return KeyLEFTPressed;
+	}
 }
 
 /*
