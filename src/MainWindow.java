@@ -20,6 +20,14 @@ import javax.swing.JPanel;
 
 import util.UnitTests;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
+import java.net.URL;
+
 /*
  * Created by Abraham Campbell on 15/01/2020.
  *   Copyright (c) 2020  Abraham Campbell
@@ -60,6 +68,7 @@ public class MainWindow {
 	 private static JButton startMenuButton;
 	 private static JButton singlePlayerButton;
 	 private static JButton multiplayerButton;
+	 private static Clip clip;
 	  
 	public MainWindow() {
 	    frame.setSize(613, 400); 
@@ -87,6 +96,7 @@ public class MainWindow {
 				canvas.addKeyListener(Controller);    //adding the controller to the Canvas  
 				canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .
 				startGame=true;
+				gameAudio();
 				
 			}});  
         int buttonWidth = 40;
@@ -112,6 +122,7 @@ public class MainWindow {
 				canvas.addKeyListener(Controller);    //adding the controller to the Canvas  
 				canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .
 				startGame=true;
+				gameAudio();
 			}});  
         multiplayerButton.setBounds(frame.getWidth()/2 - (buttonWidth*2), frame.getHeight()/2, 200, buttonWidth); 
         
@@ -176,21 +187,51 @@ public class MainWindow {
 		frame.setTitle("Score =  "+ gameworld.getScore() + " Lives = " + gameworld.getLives()); 
 		
 		if(gameworld.getLives() < 1) {
+			startGame = false;
 			endGame();
 		}
 	}
 	
 	private static void endGame() {
-		   JOptionPane.showMessageDialog(null, "Game Over! Your score was " + gameworld.getScore() + ".");
-		   startGame = false; // stop the game loop
-		   gameworld.resetGame(); // reset the game world
-		   frame.setTitle("Game"); // reset the frame title
-		   canvas.setVisible(false); // hide the canvas
-		   canvas.removeKeyListener(Controller); // remove the controller from the canvas
-		   BackgroundImageForStartMenu.setVisible(true); // show the background image for the start menu
-		   singlePlayerButton.setVisible(true); 
-		   multiplayerButton.setVisible(true);
+		startGame = false;
+		clip.stop();
+		gameOverAudio();
+		JOptionPane.showMessageDialog(null, "Game Over! Your score was " + gameworld.getScore() + ".");
+		gameworld.resetGame(); // reset the game world
+		frame.setTitle("Game"); // reset the frame title
+
+		canvas.setVisible(false); // hide the canvas
+		canvas.removeKeyListener(Controller); // remove the controller from the canvas
+		BackgroundImageForStartMenu.setVisible(true); // show the background image for the start menu
+		singlePlayerButton.setVisible(true); 
+		multiplayerButton.setVisible(true);
+	   
+	}
+	
+	private static void gameAudio() {
+		try {
+		   File file = new File("audio/only_game.wav");
+		   AudioInputStream audioIn = AudioSystem.getAudioInputStream(file.toURI().toURL());
+		   clip = AudioSystem.getClip();
+		   clip.open(audioIn);
+		   clip.loop(Clip.LOOP_CONTINUOUSLY);
+		   
+		} catch (Exception e) {
+			   e.printStackTrace();
 		}
+	}
+	
+	private static void gameOverAudio() {
+		try {
+		   File file = new File("audio/only_game.wav");
+		   AudioInputStream audioIn = AudioSystem.getAudioInputStream(file.toURI().toURL());
+		   Clip clip = AudioSystem.getClip();
+		   clip.open(audioIn);
+		   clip.start();
+		} catch (Exception e) {
+			   e.printStackTrace();
+		}
+	}
 
 }
 

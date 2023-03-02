@@ -71,7 +71,7 @@ public class Model {
 		this.multiplayer = multiplayer;
 		
 		//Level 1
-		currentLevel = new Level6();
+		currentLevel = new Level1();
 		
 		//Player 
 		Player = new Player("res/miggeldy_standing.png",new Point3f(50,300,0));
@@ -214,7 +214,7 @@ public class Model {
 		}
 	}
 	
-private void player2Logic(Player player) {
+	private void player2Logic(Player player) {
 		
 		int playerX = (int) player.getCentre().getX();
 		int playerY = (int) player.getCentre().getY();

@@ -1,8 +1,11 @@
 Add a checkpoint image or new power up image
 
-Add enemies
-
 Give an end option to close the game
 
 Create more difficult levels
 
+Multiplayer
+Distance between players
+Player doesnt respawn until other player reaches checkpoint/dies
+
+Add game audio

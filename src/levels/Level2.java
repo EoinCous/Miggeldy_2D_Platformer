@@ -24,7 +24,7 @@ public class Level2 extends Level{
 				platforms.add(new Platform(400, 500, 100, 100, Color.black));
 				platforms.add(new Platform(500, 450, 200, 150, Color.black));
 				platforms.add(new Platform(700, 400, 200, 200, Color.black));
-				platforms.add(new Platform(900, 500, 1100, 100, Color.black));
+				platforms.add(new Platform(900, 500, 100, 100, Color.black));
 				
 				powerUps = new ArrayList<>();
 				
