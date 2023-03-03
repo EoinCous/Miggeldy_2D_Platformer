@@ -11,7 +11,7 @@ public class Player extends GameObject{
 	private int lives = 3;
 	private int score = 0; 
 	private int width = 30;
-	private final int height = 45;
+	private int height = 45;
 	private boolean powerUp = false;
 	private int speed = 2;
 	
@@ -26,6 +26,16 @@ public class Player extends GameObject{
    	 	this.textureLocation = textureLocation;
 		this.centre = centre;
 	}
+	
+	public Player(String textureLocation, Point3f centre, int width, int height) {
+		//super();
+		hasTextured=true;
+   	 	this.textureLocation = textureLocation;
+		this.centre = centre;
+		this.width = width;
+		this.height = height;
+	}
+	
 	
 	public void powerUp() {
 		powerUp = true;

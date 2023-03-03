@@ -76,7 +76,7 @@ public class Model {
 		//Player 
 		Player = new Player("res/miggeldy_standing.png",new Point3f(50,300,0));
 		
-		Player2 = new Player("res/miggeldy_standing.png",new Point3f(100,300,0));
+		Player2 = new Player("res/dog_sitting.png",new Point3f(100,300,0), 35, 35);
 		
 	}
 	
@@ -171,7 +171,7 @@ public class Model {
 		//check for movement and if you fired a bullet 
 		
 		//Collision detection gravity
-		if(!platformCollision(playerX, playerY) || (!platformCollision(playerX, playerY) && player.getJumpTimer() == 0)) {
+		if(!platformCollision(playerX, playerY, player) || (!platformCollision(playerX, playerY, player) && player.getJumpTimer() == 0)) {
 			player.getCentre().ApplyVector( new Vector3f(0,-player.getSpeed(),0));
 		}else {
 			//create increment && derement methods
@@ -179,7 +179,7 @@ public class Model {
 		}
 		
 		//Move left if not colliding with a platform
-		if(Controller.getInstance().isKeyAPressed() && !platformCollision(playerX, playerY - (player.getHeight()/16))){
+		if(Controller.getInstance().isKeyAPressed() && !platformCollision(playerX, playerY - (player.getHeight()/16), player)){
 			player.getCentre().ApplyVector( new Vector3f(-player.getSpeed(),0,0)); 
 			if(!player.isPowerUp()) {
 				player.setTexture("res/miggeldy_running_l.png");
@@ -187,7 +187,7 @@ public class Model {
 		}
 		
 		//Move right if not colliding with a platform
-		if(Controller.getInstance().isKeyDPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/16))){
+		if(Controller.getInstance().isKeyDPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/16), player)){
 			player.getCentre().ApplyVector( new Vector3f(player.getSpeed(),0,0)); 
 			if(!player.isPowerUp()) {
 				player.setTexture("res/miggeldy_running.png");
@@ -195,7 +195,7 @@ public class Model {
 		}
 			
 		//Jump if head is not colliding with a platform
-		if(Controller.getInstance().isKeyWPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8))){
+		if(Controller.getInstance().isKeyWPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8), player)){
 			if(player.getJumpTime() < player.getMAX_JUMP_TIME()) {
 				player.getCentre().ApplyVector( new Vector3f(0,5,0));	
 				player.setJumpTime(player.getJumpTime()+1);
@@ -204,7 +204,7 @@ public class Model {
 		}	
 		
 		// Reset jumpTime when the player lands on a platform
-		if (platformCollision((int) player.getCentre().getX(), (int) player.getCentre().getY())) {
+		if (platformCollision((int) player.getCentre().getX(), (int) player.getCentre().getY(), player)) {
 		    player.setJumpTime(0);
 		}
 		
@@ -223,7 +223,7 @@ public class Model {
 		//check for movement and if you fired a bullet 
 		
 		//Collision detection gravity
-		if(!platformCollision(playerX, playerY) || (!platformCollision(playerX, playerY) && player.getJumpTimer() == 0)) {
+		if(!platformCollision(playerX, playerY, player) || (!platformCollision(playerX, playerY, player) && player.getJumpTimer() == 0)) {
 			player.getCentre().ApplyVector( new Vector3f(0,-player.getSpeed(),0));
 		}else {
 			//create increment && derement methods
@@ -231,23 +231,23 @@ public class Model {
 		}
 		
 		//Move left if not colliding with a platform
-		if(Controller.getInstance().isKeyLEFTPressed() && !platformCollision(playerX, playerY - (player.getHeight()/16))){
+		if(Controller.getInstance().isKeyLEFTPressed() && !platformCollision(playerX, playerY - (player.getHeight()/16), player)){
 			player.getCentre().ApplyVector( new Vector3f(-player.getSpeed(),0,0)); 
 			if(!player.isPowerUp()) {
-				player.setTexture("res/miggeldy_running_l.png");
+				player.setTexture("res/dog_running_l.png");
 			}
 		}
 		
 		//Move right if not colliding with a platform
-		if(Controller.getInstance().isKeyRIGHTPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/16))){
+		if(Controller.getInstance().isKeyRIGHTPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/16), player)){
 			player.getCentre().ApplyVector( new Vector3f(player.getSpeed(),0,0)); 
 			if(!player.isPowerUp()) {
-				player.setTexture("res/miggeldy_running.png");
+				player.setTexture("res/dog_running.png");
 			}
 		}
 			
 		//Jump if head is not colliding with a platform
-		if(Controller.getInstance().isKeyUPPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8))){
+		if(Controller.getInstance().isKeyUPPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8), player)){
 			if(player.getJumpTime() < player.getMAX_JUMP_TIME()) {
 				player.getCentre().ApplyVector( new Vector3f(0,5,0));	
 				player.setJumpTime(player.getJumpTime()+1);
@@ -256,13 +256,13 @@ public class Model {
 		}	
 		
 		// Reset jumpTime when the player lands on a platform
-		if (platformCollision((int) player.getCentre().getX(), (int) player.getCentre().getY())) {
+		if (platformCollision((int) player.getCentre().getX(), (int) player.getCentre().getY(), player)) {
 		    player.setJumpTime(0);
 		}
 		
 		//Player not moving
 		if(!player.isPowerUp() && (!Controller.getInstance().isKeyLEFTPressed() && !Controller.getInstance().isKeyRIGHTPressed())) {
-		    player.setTexture("res/miggeldy_standing.png");
+		    player.setTexture("res/dog_sitting.png");
 		}
 	}
 	
@@ -283,22 +283,14 @@ public class Model {
 		return players;
 	}
 	
-	public void jumping(int playerX, int playerY) {
-		if(!platformCollision(playerX + (Player.getWidth()/16), playerY - (Player.getHeight()/8))) {
-			if(Player.getJumpTime() < util.Player.getMAX_JUMP_TIME()) {
-				Player.getCentre().ApplyVector( new Vector3f(0,5,0));	
-				Player.setJumpTime(Player.getJumpTime()+1);
-			}
-		}
-		
-	}
 	
-	private boolean platformCollision(int x, int y) {
+	
+	private boolean platformCollision(int x, int y, Player player) {
 	    // loop through each platform and check for collisions
 		List<MovingPlatform> movingPlatforms = currentLevel.getMovingPlatforms();
 		List<Platform> platforms = currentLevel.getPlatforms();
 	    for (Platform platform : platforms) {
-	        Rectangle playerBounds = new Rectangle(x, y, Player.getWidth(), Player.getHeight());
+	        Rectangle playerBounds = new Rectangle(x, y, player.getWidth(), player.getHeight());
 	        Rectangle platformBounds = platform.getBounds();
 	        if (playerBounds.intersects(platformBounds)) {
 	            return true;
@@ -306,7 +298,7 @@ public class Model {
 	    }
 	    if(currentLevel.isPlatformsMove()){
 	    	for (Platform platform : movingPlatforms) {
-	        Rectangle playerBounds = new Rectangle(x, y, Player.getWidth(), Player.getHeight());
+	        Rectangle playerBounds = new Rectangle(x, y, player.getWidth(), player.getHeight());
 	        Rectangle platformBounds = platform.getBounds();
 	        if (playerBounds.intersects(platformBounds)) {
 	            return true;
