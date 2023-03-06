@@ -206,7 +206,7 @@ public class MainWindow {
 	
 	private static void gameAudio() {
 		try {
-		   File file = new File("audio/only_game.wav");
+		   File file = new File("audio/Grasslands_Theme.wav");
 		   AudioInputStream audioIn = AudioSystem.getAudioInputStream(file.toURI().toURL());
 		   clip = AudioSystem.getClip();
 		   clip.open(audioIn);
