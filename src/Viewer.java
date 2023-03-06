@@ -48,7 +48,6 @@ SOFTWARE.
  * Credits: Kelly Charles (2020)
  */ 
 public class Viewer extends JPanel {
-	private long CurrentAnimationTime= 0;
 	private BufferedImage backBuffer;
 	private int frameHeight = 600;
 	private int frameWidth = 1000;
@@ -98,8 +97,6 @@ public class Viewer extends JPanel {
         // Get the graphics context for the back buffer
         Graphics2D g2d = backBuffer.createGraphics();
 
-        CurrentAnimationTime++; // runs animation time step 
-
         // Draw the background
         drawBackground(g2d);
 
@@ -120,44 +117,13 @@ public class Viewer extends JPanel {
         graphics.drawImage(backBuffer, 0, 0, null);
     }
 
-
-	private void drawEnemies(int x, int y, int width, int height, String texture, Graphics g) {
-		File TextureToLoad = new File(texture);  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
-		try {
-			Image myImage = ImageIO.read(TextureToLoad);
-			//The spirte is 32x32 pixel wide and 4 of them are placed together so we need to grab a different one each time 
-			//remember your training :-) computer science everything starts at 0 so 32 pixels gets us to 31  
-			int currentPositionInAnimation= ((int) (CurrentAnimationTime%4 )*32); //slows down animation so every 10 frames we get another frame so every 100ms 
-			g.drawImage(myImage, x,y, x+width, y+height, currentPositionInAnimation  , 0, currentPositionInAnimation+31, 32, null); 
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-	}
-
 	private void drawBackground(Graphics g)
 	{
-		File TextureToLoad = new File("res/misty_background_long.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
+		File TextureToLoad = new File("res/misty_background.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
 		try {
 			Image myImage = ImageIO.read(TextureToLoad); 
 			//update position of level based on position of player.x
 			g.drawImage(myImage, - (int) gameworld.getPlayer().getCentre().getX(), 0, null);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private void drawBullet(int x, int y, int width, int height, String texture,Graphics g)
-	{
-		File TextureToLoad = new File(texture);  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
-		try {
-			Image myImage = ImageIO.read(TextureToLoad); 
-			//64 by 128 
-			 g.drawImage(myImage, x,y, x+width, y+height, 0 , 0, 63, 127, null); 
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

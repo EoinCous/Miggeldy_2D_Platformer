@@ -1,12 +1,9 @@
 Add a checkpoint image or new power up image
 
-Give an end option to close the game
-
 Create more difficult levels
 
 Multiplayer
 Distance between players
-Player doesnt respawn until other player reaches checkpoint/dies
 
 Add game audio
 
@@ -17,5 +14,4 @@ create a really hard level 8
 
 Check changes to game work
 1. Players gravity: Model.playerLogic added (player.getWidth()/16) to make player fall if colliding with wall but not ground
-3. If one player dies, they will not respawn until the other player dies or gets a checkpoint
 4. End game if player reaches level 8 checkpoint

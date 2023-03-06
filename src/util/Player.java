@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 public class Player extends GameObject{
 	
 	private int jumpTime = 0;
-	private static int MAX_JUMP_TIME = 30; // Change this value to adjust the maximum jump time
+	private int max_jump_time = 30; // Change this value to adjust the maximum jump time
 	private int jumpTimer = 0;
 	private int lives = 3;
 	private int score = 0; 
@@ -43,7 +43,7 @@ public class Player extends GameObject{
 		powerUp = true;
 		textureLocation = "res/miggeldy_on_bike.png";
 		width = 45;
-		MAX_JUMP_TIME = 60;
+		max_jump_time = 60;
 		//speed *= 2;
 		lives++;
 		score++;
@@ -51,7 +51,7 @@ public class Player extends GameObject{
 	
 	public void powerDown() {
 		powerUp = false;
-		MAX_JUMP_TIME = 30;
+		max_jump_time = 30;
 		width = 30;
 	}
 	
@@ -119,12 +119,12 @@ public class Player extends GameObject{
 		this.jumpTime = jumpTime;
 	}
 
-	public static int getMAX_JUMP_TIME() {
-		return MAX_JUMP_TIME;
+	public int getMaxJumpTime() {
+		return max_jump_time;
 	}
 
-	public static void setMAX_JUMP_TIME(int mAX_JUMP_TIME) {
-		MAX_JUMP_TIME = mAX_JUMP_TIME;
+	public void setMaxJumpTime(int maxJumpTime) {
+		max_jump_time = maxJumpTime;
 	}
 
 	public int getJumpTimer() {

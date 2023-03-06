@@ -57,15 +57,12 @@ SOFTWARE.
 
 public class MainWindow {
 	 private static JFrame frame = new JFrame("Game");   // Change to the name of your game 
-	 //private static Model gameworld= new Model();
 	 private static Model gameworld;
-	 //private static Viewer canvas = new  Viewer(gameworld);
 	 private static Viewer canvas;
 	 private static KeyListener Controller =new Controller(); 
 	 private static int TargetFPS = 100;
 	 private static boolean startGame = false; 
 	 private static JLabel BackgroundImageForStartMenu ;
-	 private static JButton startMenuButton;
 	 private static JButton singlePlayerButton;
 	 private static JButton multiplayerButton;
 	 private static Clip clip;
@@ -172,9 +169,6 @@ public class MainWindow {
 	private static void gameloop() { 
 		// GAMELOOP  
 		
-		// controller input  will happen on its own thread 
-		// So no need to call it explicitly 
-		//pauseOption();
 		
 		// model update   
 		gameworld.gamemode();
@@ -197,8 +191,10 @@ public class MainWindow {
 		clip.stop();
 		gameOverAudio();
 		JOptionPane.showMessageDialog(null, "Game Over! Your score was " + gameworld.getScore() + ".");
+		
 		gameworld.resetGame(); // reset the game world
 		frame.setTitle("Game"); // reset the frame title
+		frame.setSize(613, 400); 
 
 		canvas.setVisible(false); // hide the canvas
 		canvas.removeKeyListener(Controller); // remove the controller from the canvas

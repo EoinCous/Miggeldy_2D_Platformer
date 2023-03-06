@@ -235,7 +235,7 @@ public class Model {
 		}
 		
 		//Move left if not colliding with a platform
-		if(Controller.getInstance().isKeyAPressed() && !platformCollision(playerX, playerY - (player.getHeight()/16), player)){
+		if(controller.isKeyAPressed() && !platformCollision(playerX, playerY - (player.getHeight()/16), player)){
 			player.getCentre().ApplyVector( new Vector3f(-player.getSpeed(),0,0)); 
 			if(!player.isPowerUp()) {
 				player.setTexture("res/miggeldy_running_l.png");
@@ -243,7 +243,7 @@ public class Model {
 		}
 		
 		//Move right if not colliding with a platform
-		if(Controller.getInstance().isKeyDPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/16), player)){
+		if(controller.isKeyDPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/16), player)){
 			player.getCentre().ApplyVector( new Vector3f(player.getSpeed(),0,0)); 
 			if(!player.isPowerUp()) {
 				player.setTexture("res/miggeldy_running.png");
@@ -251,8 +251,8 @@ public class Model {
 		}
 			
 		//Jump if head is not colliding with a platform
-		if(Controller.getInstance().isKeyWPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8), player)){
-			if(player.getJumpTime() < player.getMAX_JUMP_TIME()) {
+		if(controller.isKeyWPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8), player)){
+			if(player.getJumpTime() < player.getMaxJumpTime()) {
 				player.getCentre().ApplyVector( new Vector3f(0,5,0));	
 				player.setJumpTime(player.getJumpTime()+1);
 				player.setJumpTimer(20);
@@ -265,7 +265,7 @@ public class Model {
 		}
 		
 		//Player not moving
-		if(!player.isPowerUp() && (!Controller.getInstance().isKeyAPressed() && !Controller.getInstance().isKeyDPressed())) {
+		if(!player.isPowerUp() && (!controller.isKeyAPressed() && !controller.isKeyDPressed())) {
 		    player.setTexture("res/miggeldy_standing.png");
 		}
 	}
@@ -287,7 +287,7 @@ public class Model {
 		}
 		
 		//Move left if not colliding with a platform
-		if(Controller.getInstance().isKeyLEFTPressed() && !platformCollision(playerX, playerY - (player.getHeight()/16), player)){
+		if(controller.isKeyLEFTPressed() && !platformCollision(playerX, playerY - (player.getHeight()/16), player)){
 			player.getCentre().ApplyVector( new Vector3f(-player.getSpeed(),0,0)); 
 			if(!player.isPowerUp()) {
 				player.setTexture("res/dog_running_l.png");
@@ -295,7 +295,7 @@ public class Model {
 		}
 		
 		//Move right if not colliding with a platform
-		if(Controller.getInstance().isKeyRIGHTPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/16), player)){
+		if(controller.isKeyRIGHTPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/16), player)){
 			player.getCentre().ApplyVector( new Vector3f(player.getSpeed(),0,0)); 
 			if(!player.isPowerUp()) {
 				player.setTexture("res/dog_running.png");
@@ -303,8 +303,8 @@ public class Model {
 		}
 			
 		//Jump if head is not colliding with a platform
-		if(Controller.getInstance().isKeyUPPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8), player)){
-			if(player.getJumpTime() < player.getMAX_JUMP_TIME()) {
+		if(controller.isKeyUPPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8), player)){
+			if(player.getJumpTime() < player.getMaxJumpTime()) {
 				player.getCentre().ApplyVector( new Vector3f(0,5,0));	
 				player.setJumpTime(player.getJumpTime()+1);
 				player.setJumpTimer(20);
@@ -317,7 +317,7 @@ public class Model {
 		}
 		
 		//Player not moving
-		if(!player.isPowerUp() && (!Controller.getInstance().isKeyLEFTPressed() && !Controller.getInstance().isKeyRIGHTPressed())) {
+		if(!player.isPowerUp() && (!controller.isKeyLEFTPressed() && !controller.isKeyRIGHTPressed())) {
 		    player.setTexture("res/dog_sitting.png");
 		}
 	}

@@ -24,7 +24,7 @@ public class Level7 extends Level {
 
         //Ground platforms
         platforms.add(new Platform(0, 500, 300, 100, Color.black));
-        platforms.add(new Platform(600, 500, 300, 100, Color.black));
+        platforms.add(new Platform(600, 500, 400, 100, Color.black));
 
         //Floating platforms
         platforms.add(new Platform(200, 400, 100, 20, Color.blue));
