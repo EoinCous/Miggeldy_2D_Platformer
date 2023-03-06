@@ -50,7 +50,7 @@ public class Model {
 	private Player Player2;
 	private Controller controller = Controller.getInstance();
 	private Level currentLevel;
-	private int level = 1;
+	private int level = 8;
 	private final int frameHeight = 600;
 	private boolean multiplayer = false;
 
@@ -62,7 +62,7 @@ public class Model {
 		currentLevel = new Level8();
 		
 		//Player 
-		Player = new Player("res/miggeldy_standing.png",new Point3f(50,300,0));
+		Player = new Player("res/miggeldy_standing.png",new Point3f(50,400,0));
 		
 	}
 	
@@ -76,9 +76,9 @@ public class Model {
 		currentLevel = new Level1();
 		
 		//Player 
-		Player = new Player("res/miggeldy_standing.png",new Point3f(50,300,0));
+		Player = new Player("res/miggeldy_standing.png",new Point3f(50,400,0));
 		
-		Player2 = new Player(2, "res/dog_sitting.png",new Point3f(100,300,0), 35, 35);
+		Player2 = new Player(2, "res/dog_sitting.png",new Point3f(100,400,0), 35, 35);
 		
 	}
 	
@@ -132,9 +132,9 @@ public class Model {
 					currentLevel = new Level8();
 					break;
 			}
-			Player.setCentre(new Point3f(50,300,0));
+			Player.setCentre(new Point3f(50,400,0));
 			if(multiplayer) {
-				Player2.setCentre(new Point3f(100,300,0));
+				Player2.setCentre(new Point3f(100,400,0));
 				Player.setDown(false);
 				Player2.setDown(false);
 			}
@@ -142,7 +142,7 @@ public class Model {
 		}
 
 		//Update the platform positions on certain levels
-		if(level == 5 || level == 7) {
+		if(level == 5 || level == 7 || level == 8) {
 			for(MovingPlatform movingPlatform : currentLevel.getMovingPlatforms()) {
 			movingPlatform.update();
 			}
