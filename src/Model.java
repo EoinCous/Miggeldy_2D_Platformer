@@ -1,9 +1,5 @@
-import java.awt.Color;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import levels.Level;
 import levels.Level1;
@@ -50,7 +46,7 @@ public class Model {
 	private Player Player2;
 	private Controller controller = Controller.getInstance();
 	private Level currentLevel;
-	private int level = 8;
+	private int level = 1;
 	private final int frameHeight = 600;
 	private boolean multiplayer = false;
 
@@ -59,7 +55,7 @@ public class Model {
 		//setup game world 
 		
 		//Level 1
-		currentLevel = new Level8();
+		currentLevel = new Level1();
 		
 		//Player 
 		Player = new Player("res/miggeldy_standing.png",new Point3f(50,400,0));
@@ -200,10 +196,10 @@ public class Model {
 		
 		//Collision detection gravity
 		//Move the player downwards if the player is not colliding with a platform or the player is not jumping
-		if(!platformCollision(playerX + (player.getWidth()/16), playerY, player) || (!platformCollision(playerX + (player.getWidth()/16), playerY, player) && player.getJumpTimer() == 0)) {
-			player.getCentre().ApplyVector( new Vector3f(0,-player.getSpeed(),0));
+		if(!platformCollision(playerX + (player.getWidth()/16), playerY, player) || (!platformCollision(playerX + (player.getWidth()/16), playerY, player) && player.getJumpDelay() == 0)) {
+			player.getCentre().ApplyVector( new Vector3f(0,-2,0));
 		}else {
-			player.decrementJumpTimer();
+			player.decrementJumpDelay();
 		}
 		
 		//Move left if not colliding with a platform
@@ -229,7 +225,7 @@ public class Model {
 			if(player.getJumpTime() < player.getMaxJumpTime()) {
 				player.getCentre().ApplyVector( new Vector3f(0,5,0));	
 				player.incrementJumpTime();
-				player.setJumpTimer(20);
+				player.setJumpDelay(20);
 			}
 		}	
 		
@@ -250,10 +246,10 @@ public class Model {
 		int playerY = (int) player.getCentre().getY();
 		
 		//Collision detection gravity
-		if(!platformCollision(playerX, playerY, player) || (!platformCollision(playerX, playerY, player) && player.getJumpTimer() == 0)) {
+		if(!platformCollision(playerX, playerY, player) || (!platformCollision(playerX, playerY, player) && player.getJumpDelay() == 0)) {
 			player.getCentre().ApplyVector( new Vector3f(0,-player.getSpeed(),0));
 		}else {
-			player.decrementJumpTimer();
+			player.decrementJumpDelay();
 		}
 		
 		//Move left if not colliding with a platform
@@ -277,7 +273,7 @@ public class Model {
 			if(player.getJumpTime() < player.getMaxJumpTime()) {
 				player.getCentre().ApplyVector( new Vector3f(0,5,0));	
 				player.incrementJumpTime();
-				player.setJumpTimer(20);
+				player.setJumpDelay(20);
 			}
 		}	
 		

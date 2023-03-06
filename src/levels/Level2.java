@@ -12,7 +12,6 @@ import util.Point3f;
 
 public class Level2 extends Level{
 	private List<Platform> platforms;
-    private List<MovingPlatform> movingPlatforms;
 	private List<GameObject> powerUps;
 	private GameObject checkpoint;
 	

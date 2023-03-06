@@ -29,7 +29,7 @@ public class Level7 extends Level {
         
         //Moving platforms
         movingPlatforms = new ArrayList<>();
-        movingPlatforms.add(new MovingPlatform(200, 450, 100, 20, Color.green, 150, 800, 1));
+        movingPlatforms.add(new MovingPlatform(600, 450, 100, 20, Color.green, 150, 800, 1));
 
 
         checkpoint = new GameObject("res/flagGreen.png", 50, 50, new Point3f(900, 450, 0));

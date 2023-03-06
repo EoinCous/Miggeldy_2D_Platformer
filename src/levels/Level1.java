@@ -12,8 +12,7 @@ import util.Point3f;
 //Could also be called level1
 
 public class Level1 extends Level{
-	private List<Platform> platforms;    
-	private List<MovingPlatform> movingPlatforms;
+	private List<Platform> platforms;
 	private List<GameObject> powerUps;
 	private GameObject checkpoint;
 	//private boolean platformsMove = false;
@@ -26,8 +25,6 @@ public class Level1 extends Level{
 
 		//Ground platforms
 		platforms.add(new Platform(0, 500, 1000, 100, Color.black));
-		
-		movingPlatforms = new ArrayList<>();
 		
 		checkpoint = new GameObject("res/flagGreen.png", 50, 50, new Point3f(700, 450, 0));
 	}

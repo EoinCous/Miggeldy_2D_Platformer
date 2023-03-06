@@ -5,9 +5,9 @@ import java.awt.Rectangle;
 
 public class Player extends GameObject{
 	
-	private int jumpTime = 0;
+	private int jumpTime = 0; //to stop player floating
 	private int max_jump_time = 30; // Change this value to adjust the maximum jump time
-	private int jumpTimer = 0;
+	private int jumpDelay = 0; //to prevent player jumping continuously
 	private int lives = 3;
 	private int score = 0; 
 	private int width = 30;
@@ -141,16 +141,16 @@ public class Player extends GameObject{
 		max_jump_time = maxJumpTime;
 	}
 
-	public int getJumpTimer() {
-		return jumpTimer;
+	public int getJumpDelay() {
+		return jumpDelay;
 	}
 
-	public void setJumpTimer(int jumpTimer) {
-		this.jumpTimer = jumpTimer;
+	public void setJumpDelay(int jumpDelay) {
+		this.jumpDelay = jumpDelay;
 	}
 	
-	public void decrementJumpTimer() {
-		this.jumpTimer--;
+	public void decrementJumpDelay() {
+		this.jumpDelay--;
 	}
 
 	public int getLives() {

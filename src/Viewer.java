@@ -1,20 +1,14 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.LayoutManager;
-import java.awt.Rectangle;
-import java.awt.TexturePaint;
-import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 import util.GameObject;
 import util.MovingPlatform;
@@ -91,6 +85,7 @@ public class Viewer extends JPanel {
 		this.repaint();
 	}
 	
+	//https://stackoverflow.com/questions/6575578/convert-a-graphics2d-to-an-image-or-bufferedimage
 	public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
@@ -119,7 +114,7 @@ public class Viewer extends JPanel {
 
 	private void drawBackground(Graphics g)
 	{
-		File TextureToLoad = new File("res/misty_background.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
+		File TextureToLoad = new File("res/misty_background.png");  
 		try {
 			Image myImage = ImageIO.read(TextureToLoad); 
 			//update position of level based on position of player.x
@@ -139,7 +134,7 @@ public class Viewer extends JPanel {
 		int width = (int) player.getWidth();
 		int height = (int) player.getHeight();
 		String texture = player.getTexture();
-		File TextureToLoad = new File(texture);  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
+		File TextureToLoad = new File(texture);  
 		try {
 			Image myImage = ImageIO.read(TextureToLoad);
 			g.drawImage(myImage, x, y, width, height, this);
@@ -149,6 +144,7 @@ public class Viewer extends JPanel {
 		} 
 	}
 	
+	//Draw all platforms, power ups and checkpoints
 	private void drawLevel(Graphics graphics) {
 				
 		//Draw power ups

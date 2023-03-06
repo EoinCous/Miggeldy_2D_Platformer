@@ -30,6 +30,7 @@ public class Level8 extends Level {
         platforms.add(new Platform(50, 300, 100, 20, Color.black));
         platforms.add(new Platform(250, 250, 150, 20, Color.black));
         platforms.add(new Platform(500, 200, 100, 20, Color.black));
+        platforms.add(new Platform(875, 500, 50, 20, Color.black));
 
         //Moving platforms
         movingPlatforms = new ArrayList<>();

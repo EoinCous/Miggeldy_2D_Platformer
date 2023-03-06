@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import util.GameObject;
-import util.MovingPlatform;
 import util.Platform;
 import util.Point3f;
 
 
 public class Level3 extends Level{
 	private List<Platform> platforms;
-    private List<MovingPlatform> movingPlatforms;
 	private List<GameObject> powerUps;
 	private GameObject checkpoint;
 	
