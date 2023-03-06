@@ -27,9 +27,9 @@ public class Level3 extends Level{
 				platforms.add(new Platform(600, 400, 100, 20, Color.red));
 				
 				powerUps = new ArrayList<>();
-				powerUps.add(new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(300, 350, 0)));
+				powerUps.add(new GameObject("res/guinness.png", 50, 50, new Point3f(300, 350, 0)));
 				
-				checkpoint = new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(900, 450, 0));
+				checkpoint = new GameObject("res/flagGreen.png", 50, 50, new Point3f(900, 450, 0));
 	}
 	
 	public List<Platform> getPlatforms(){

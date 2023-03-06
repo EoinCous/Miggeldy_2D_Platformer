@@ -104,36 +104,6 @@ public class Model {
 		powerUpLogic(player);
 		
 	}
-	
-	/*
-	//Changes levels when player reaches a power up
-	private void levelLogic() {
-		if(touchingCheckpoint((int)Player.getCentre().getX(), (int)Player.getCentre().getY())) {
-			level++;
-			switch(level) {
-				case 2:
-					currentLevel = new Level2();
-					break;
-				case 3:
-					currentLevel = new Level3();
-					break;
-				case 4:
-					currentLevel = new Level4();
-					break;
-				case 5:
-					currentLevel = new Level5();
-					break;
-				case 6:
-					currentLevel = new Level6();
-					break;
-			}
-			Player.setCentre(new Point3f(50,300,0));
-			if(multiplayer) {
-				Player2.setCentre(new Point3f(100,300,0));
-			}
-			Player.setScore(+1);
-			
-		}*/
 		
 		//Changes levels when player reaches a power up
 		private void levelLogic(Player player) {
@@ -419,6 +389,9 @@ public class Model {
 		level = 1;
 		currentLevel = new Level1();
 	}
+	
+	//References
+	//Player images from https://labs.openai.com
  
 }
 

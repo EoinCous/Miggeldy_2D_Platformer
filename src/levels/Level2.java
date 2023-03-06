@@ -28,7 +28,7 @@ public class Level2 extends Level{
 				
 				powerUps = new ArrayList<>();
 				
-				checkpoint = new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(900, 450, 0));
+				checkpoint = new GameObject("res/flagGreen.png", 50, 50, new Point3f(910, 450, 0));
 				//powerUps.add(new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(600, 300, 0)));
 	}
 	

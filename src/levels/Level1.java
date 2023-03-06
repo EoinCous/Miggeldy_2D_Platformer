@@ -29,7 +29,7 @@ public class Level1 extends Level{
 		
 		movingPlatforms = new ArrayList<>();
 		
-		checkpoint = new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(700, 450, 0));
+		checkpoint = new GameObject("res/flagGreen.png", 50, 50, new Point3f(700, 450, 0));
 	}
 	
 	public List<Platform> getPlatforms(){

@@ -178,6 +178,8 @@ public class Viewer extends JPanel {
 	}
 }
 
+//Background image from https://www.artstation.com/artwork/Oovn0k
+//Checkpoints from https://opengameart.org/content/platformer-art-complete-pack-often-updated
 
 /*
  * 

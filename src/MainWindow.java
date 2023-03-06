@@ -231,6 +231,12 @@ public class MainWindow {
 
 }
 
+//Start menu image from https://www.facebook.com/MDPStudios/photos/a.362544013791999.82504.109986249047778/1194890970557295/?type=3&theater
+
+//Theme song from https://opengameart.org/content/platformer-game-music-pack
+//Game over audio from https://tuna.voicemod.net/search/sounds?search=platformer%20game
+
+
 /*
  * 
  * 

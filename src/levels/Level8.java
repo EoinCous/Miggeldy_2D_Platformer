@@ -18,9 +18,9 @@ public class Level8 extends Level {
         platforms = new ArrayList<>();
 
         powerUps = new ArrayList<>();
-        powerUps.add(new GameObject("res/bullet.png", 50, 50, new Point3f(100, 200, 0)));
-        powerUps.add(new GameObject("res/bullet.png", 50, 50, new Point3f(400, 300, 0)));
-        powerUps.add(new GameObject("res/bullet.png", 50, 50, new Point3f(700, 400, 0)));
+        powerUps.add(new GameObject("res/guinness.png", 50, 50, new Point3f(100, 200, 0)));
+        powerUps.add(new GameObject("res/guinness.png", 50, 50, new Point3f(400, 300, 0)));
+        powerUps.add(new GameObject("res/guinness.png", 50, 50, new Point3f(700, 400, 0)));
 
         //Ground platforms
         platforms.add(new Platform(0, 500, 300, 100, Color.black));
@@ -32,7 +32,7 @@ public class Level8 extends Level {
         platforms.add(new Platform(600, 400, 100, 20, Color.blue));
 
 
-        checkpoint = new GameObject("res/Guinness_transparent.png", 50, 50, new Point3f(900, 450, 0));
+        checkpoint = new GameObject("res/flagRed.png", 50, 50, new Point3f(900, 450, 0));
     }
 
     public List<Platform> getPlatforms() {
