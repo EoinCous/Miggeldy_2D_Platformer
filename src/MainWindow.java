@@ -23,10 +23,6 @@ import util.UnitTests;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
-import java.net.URL;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -204,6 +200,7 @@ public class MainWindow {
 	   
 	}
 	
+	//How to use Clip https://www.baeldung.com/java-play-sound
 	private static void gameAudio() {
 		try {
 		   File file = new File("audio/Grasslands_Theme.wav");
@@ -217,6 +214,7 @@ public class MainWindow {
 		}
 	}
 	
+	//How to use Clip https://www.baeldung.com/java-play-sound
 	private static void gameOverAudio() {
 		try {
 		   File file = new File("audio/only_game.wav");

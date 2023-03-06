@@ -49,6 +49,16 @@ public class Player extends GameObject{
 		score++;
 	}
 	
+	public void powerUp2() {
+		powerUp = true;
+		textureLocation = "res/dog_on_bike.png";
+		width = 45;
+		max_jump_time = 60;
+		//speed *= 2;
+		lives++;
+		score++;
+	}
+	
 	public void powerDown() {
 		powerUp = false;
 		max_jump_time = 30;
@@ -118,6 +128,10 @@ public class Player extends GameObject{
 	public void setJumpTime(int jumpTime) {
 		this.jumpTime = jumpTime;
 	}
+	
+	public void incrementJumpTime() {
+		this.jumpTime++;
+	}
 
 	public int getMaxJumpTime() {
 		return max_jump_time;
@@ -133,6 +147,10 @@ public class Player extends GameObject{
 
 	public void setJumpTimer(int jumpTimer) {
 		this.jumpTimer = jumpTimer;
+	}
+	
+	public void decrementJumpTimer() {
+		this.jumpTimer--;
 	}
 
 	public int getLives() {

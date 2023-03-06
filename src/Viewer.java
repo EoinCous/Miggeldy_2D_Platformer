@@ -166,7 +166,7 @@ public class Viewer extends JPanel {
 		}
 		
 		//Draw moving platforms
-		if(gameworld.getLevel() == 5) {
+		if(gameworld.getLevel() == 5 || gameworld.getLevel() == 7) {
 			List<MovingPlatform> movingPlatforms = gameworld.getCurrentLevel().getMovingPlatforms();
 			for(MovingPlatform movingPlatform : movingPlatforms) {
 				movingPlatform.draw(graphics);

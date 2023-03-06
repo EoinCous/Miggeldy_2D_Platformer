@@ -54,17 +54,19 @@ public class Model {
 	private final int frameHeight = 600;
 	private boolean multiplayer = false;
 
+	//Singleplayer
 	public Model() {
 		//setup game world 
 		
 		//Level 1
-		currentLevel = new Level1();
+		currentLevel = new Level8();
 		
 		//Player 
 		Player = new Player("res/miggeldy_standing.png",new Point3f(50,300,0));
 		
 	}
 	
+	//Multiplayer
 	public Model(boolean multiplayer) {
 		//setup game world 
 		
@@ -80,9 +82,7 @@ public class Model {
 		
 	}
 	
-	public void gamemode() {
-		//levelLogic();
-		
+	public void gamemode() {		
 		if(!multiplayer) {
 			playerLogic(Player);
 			gamelogic(Player);
@@ -105,56 +105,63 @@ public class Model {
 		
 	}
 		
-		//Changes levels when player reaches a power up
-		private void levelLogic(Player player) {
-			if(touchingCheckpoint((int)player.getCentre().getX(), (int)player.getCentre().getY())) {
-				level++;
-				switch(level) {
-					case 2:
-						currentLevel = new Level2();
-						break;
-					case 3:
-						currentLevel = new Level3();
-						break;
-					case 4:
-						currentLevel = new Level4();
-						break;
-					case 5:
-						currentLevel = new Level5();
-						break;
-					case 6:
-						currentLevel = new Level6();
-						break;
-					case 7:
-						currentLevel = new Level7();
-						break;
-					case 8:
-						currentLevel = new Level8();
-						break;
-				}
-				Player.setCentre(new Point3f(50,300,0));
-				if(multiplayer) {
-					Player2.setCentre(new Point3f(100,300,0));
-					Player.setDown(false);
-					Player2.setDown(false);
-				}
-				Player.setScore(Player.getScore() + 1);
+	//Changes levels when player reaches a checkpoint
+	private void levelLogic(Player player) {
+		if(touchingCheckpoint((int)player.getCentre().getX(), (int)player.getCentre().getY())) {
+			level++;
+			switch(level) {
+				case 2:
+					currentLevel = new Level2();
+					break;
+				case 3:
+					currentLevel = new Level3();
+					break;
+				case 4:
+					currentLevel = new Level4();
+					break;
+				case 5:
+					currentLevel = new Level5();
+					break;
+				case 6:
+					currentLevel = new Level6();
+					break;
+				case 7:
+					currentLevel = new Level7();
+					break;
+				case 8:
+					currentLevel = new Level8();
+					break;
 			}
+			Player.setCentre(new Point3f(50,300,0));
+			if(multiplayer) {
+				Player2.setCentre(new Point3f(100,300,0));
+				Player.setDown(false);
+				Player2.setDown(false);
+			}
+			Player.setScore(Player.getScore() + 1);
+		}
 
-		if(level == 5) {
+		//Update the platform positions on certain levels
+		if(level == 5 || level == 7) {
 			for(MovingPlatform movingPlatform : currentLevel.getMovingPlatforms()) {
 			movingPlatform.update();
 			}
 		}
-		
 	}
 	
+	//Power up the player that touches a power up
 	private void powerUpLogic(Player player) {
 		if(touchingPowerUp((int)player.getCentre().getX(), (int)player.getCentre().getY())) {
-			player.powerUp();
+			if(player.getID()!=2) {
+				player.powerUp();
+			}else {
+				player.powerUp2();
+			}
+			
 		}
 	}
 	
+	//Respawn the player when they fall off the screen
 	private void deathLogic(Player player) {
 		if((int) player.getCentre().getY() > frameHeight) {
 			
@@ -182,31 +189,27 @@ public class Model {
 			Player.setDown(false);
 			Player2.setDown(false);
 		}
-			
 	}
 	
-	
-	
 
+	//Controls how the player moves based on the platforms and input from user
 	private void playerLogic(Player player) {
 		
 		int playerX = (int) player.getCentre().getX();
 		int playerY = (int) player.getCentre().getY();
-		// smoother animation is possible if we make a target position  // done but may try to change things for students  
-		 
-		//check for movement and if you fired a bullet 
 		
 		//Collision detection gravity
+		//Move the player downwards if the player is not colliding with a platform or the player is not jumping
 		if(!platformCollision(playerX + (player.getWidth()/16), playerY, player) || (!platformCollision(playerX + (player.getWidth()/16), playerY, player) && player.getJumpTimer() == 0)) {
 			player.getCentre().ApplyVector( new Vector3f(0,-player.getSpeed(),0));
 		}else {
-			//create increment && derement methods
-			player.setJumpTimer(player.getJumpTimer()-1);
+			player.decrementJumpTimer();
 		}
 		
 		//Move left if not colliding with a platform
 		if(controller.isKeyAPressed() && !platformCollision(playerX, playerY - (player.getHeight()/16), player)){
 			player.getCentre().ApplyVector( new Vector3f(-player.getSpeed(),0,0)); 
+			//change the players animation if moving left and not powered up
 			if(!player.isPowerUp()) {
 				player.setTexture("res/miggeldy_running_l.png");
 			}
@@ -215,6 +218,7 @@ public class Model {
 		//Move right if not colliding with a platform
 		if(controller.isKeyDPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/16), player)){
 			player.getCentre().ApplyVector( new Vector3f(player.getSpeed(),0,0)); 
+			//change the players animation if moving right and not powered up
 			if(!player.isPowerUp()) {
 				player.setTexture("res/miggeldy_running.png");
 			}
@@ -224,7 +228,7 @@ public class Model {
 		if(controller.isKeyWPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8), player)){
 			if(player.getJumpTime() < player.getMaxJumpTime()) {
 				player.getCentre().ApplyVector( new Vector3f(0,5,0));	
-				player.setJumpTime(player.getJumpTime()+1);
+				player.incrementJumpTime();
 				player.setJumpTimer(20);
 			}
 		}	
@@ -244,16 +248,12 @@ public class Model {
 		
 		int playerX = (int) player.getCentre().getX();
 		int playerY = (int) player.getCentre().getY();
-		// smoother animation is possible if we make a target position  // done but may try to change things for students  
-		 
-		//check for movement and if you fired a bullet 
 		
 		//Collision detection gravity
 		if(!platformCollision(playerX, playerY, player) || (!platformCollision(playerX, playerY, player) && player.getJumpTimer() == 0)) {
 			player.getCentre().ApplyVector( new Vector3f(0,-player.getSpeed(),0));
 		}else {
-			//create increment && derement methods
-			player.setJumpTimer(player.getJumpTimer()-1);
+			player.decrementJumpTimer();
 		}
 		
 		//Move left if not colliding with a platform
@@ -276,7 +276,7 @@ public class Model {
 		if(controller.isKeyUPPressed() && !platformCollision(playerX + (player.getWidth()/16), playerY - (player.getHeight()/8), player)){
 			if(player.getJumpTime() < player.getMaxJumpTime()) {
 				player.getCentre().ApplyVector( new Vector3f(0,5,0));	
-				player.setJumpTime(player.getJumpTime()+1);
+				player.incrementJumpTime();
 				player.setJumpTimer(20);
 			}
 		}	
@@ -313,7 +313,7 @@ public class Model {
 	}
 	
 	
-	
+	//checks if platform and players rectangle bounds are intersecting
 	private boolean platformCollision(int x, int y, Player player) {
 	    // loop through each platform and check for collisions
 		List<MovingPlatform> movingPlatforms = currentLevel.getMovingPlatforms();
@@ -327,14 +327,13 @@ public class Model {
 	    }
 	    if(currentLevel.isPlatformsMove()){
 	    	for (Platform platform : movingPlatforms) {
-	        Rectangle playerBounds = new Rectangle(x, y, player.getWidth(), player.getHeight());
-	        Rectangle platformBounds = platform.getBounds();
-	        if (playerBounds.intersects(platformBounds)) {
-	            return true;
-	        }
+		        Rectangle playerBounds = new Rectangle(x, y, player.getWidth(), player.getHeight());
+		        Rectangle platformBounds = platform.getBounds();
+		        if (playerBounds.intersects(platformBounds)) {
+		            return true;
+		        }
+	    	}
 	    }
-	    }
-	    
 	    return false;
 	}
 	

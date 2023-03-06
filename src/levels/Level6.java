@@ -18,9 +18,6 @@ public class Level6 extends Level {
         platforms = new ArrayList<>();
 
         powerUps = new ArrayList<>();
-        powerUps.add(new GameObject("res/guinness.png", 50, 50, new Point3f(100, 200, 0)));
-        powerUps.add(new GameObject("res/guinness.png", 50, 50, new Point3f(400, 300, 0)));
-        powerUps.add(new GameObject("res/guinness.png", 50, 50, new Point3f(700, 400, 0)));
 
         //Ground platforms
         platforms.add(new Platform(0, 500, 300, 100, Color.black));
