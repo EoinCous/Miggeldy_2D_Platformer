@@ -187,8 +187,9 @@ public class Model {
 	
 	private void deathLogic(Player player) {
 		if((int) player.getCentre().getY() > frameHeight) {
-			player.setLives(Player.getLives()-1);
+			
 			if(!multiplayer) {
+				player.setLives(Player.getLives()-1);
 				player.setCentre(new Point3f(100,300,0));
 			}else {
 				multiplayerDeathLogic(player);
@@ -202,19 +203,16 @@ public class Model {
 	
 	//if multiplayer, remove the player that dies until the second player dies or reaches the checkpoint
 	private void multiplayerDeathLogic(Player player) {
-		if((int) player.getCentre().getY() > frameHeight) {
-			player.setDown(true);
-			//if both players are down, remove a life and respawn both
-			if(getOtherPlayer(player).isDown()) {
-				player.setLives(Player.getLives()-1);
-				Player.setCentre(new Point3f(50,300,0));
-				Player2.setCentre(new Point3f(100,300,0));
-				Player.setDown(false);
-				Player2.setDown(false);
-			}
-			
-			
+		player.setDown(true);
+		//if both players are down, remove a life and respawn both
+		if(getOtherPlayer(player).isDown()) {
+			player.setLives(Player.getLives()-1);
+			Player.setCentre(new Point3f(50,300,0));
+			Player2.setCentre(new Point3f(100,300,0));
+			Player.setDown(false);
+			Player2.setDown(false);
 		}
+			
 	}
 	
 	
@@ -330,9 +328,9 @@ public class Model {
 	
 	public Player getOtherPlayer(Player player) {
 		if(player.getID() == 2) {
-			return Player2;
+			return Player;
 		}
-		return Player;
+		return Player2;
 	}
 	
 	public boolean isMultiplayer() {

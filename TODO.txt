@@ -17,6 +17,5 @@ create a really hard level 8
 
 Check changes to game work
 1. Players gravity: Model.playerLogic added (player.getWidth()/16) to make player fall if colliding with wall but not ground
-2. Either player can get the checkpoint now
 3. If one player dies, they will not respawn until the other player dies or gets a checkpoint
 4. End game if player reaches level 8 checkpoint
