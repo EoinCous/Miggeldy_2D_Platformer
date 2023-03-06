@@ -186,7 +186,7 @@ public class MainWindow {
 		//score update  
 		frame.setTitle("Score =  "+ gameworld.getScore() + " Lives = " + gameworld.getLives()); 
 		
-		if(gameworld.getLives() < 1) {
+		if(gameworld.getLives() < 1 || gameworld.getLevel() > 8) {
 			startGame = false;
 			endGame();
 		}

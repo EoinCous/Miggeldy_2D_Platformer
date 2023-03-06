@@ -12,6 +12,8 @@ import levels.Level3;
 import levels.Level4;
 import levels.Level5;
 import levels.Level6;
+import levels.Level7;
+import levels.Level8;
 import util.GameObject;
 import util.MovingPlatform;
 import util.Point3f;
@@ -47,8 +49,6 @@ public class Model {
 	private Player Player;
 	private Player Player2;
 	private Controller controller = Controller.getInstance();
-	private CopyOnWriteArrayList<GameObject> EnemiesList  = new CopyOnWriteArrayList<GameObject>();
-	private CopyOnWriteArrayList<GameObject> BulletList  = new CopyOnWriteArrayList<GameObject>();
 	private Level currentLevel;
 	private int level = 1;
 	private final int frameHeight = 600;
@@ -76,12 +76,12 @@ public class Model {
 		//Player 
 		Player = new Player("res/miggeldy_standing.png",new Point3f(50,300,0));
 		
-		Player2 = new Player("res/dog_sitting.png",new Point3f(100,300,0), 35, 35);
+		Player2 = new Player(2, "res/dog_sitting.png",new Point3f(100,300,0), 35, 35);
 		
 	}
 	
 	public void gamemode() {
-		levelLogic();
+		//levelLogic();
 		
 		if(!multiplayer) {
 			playerLogic(Player);
@@ -97,6 +97,7 @@ public class Model {
 	}
 	
 	public void gamelogic(Player player) {
+		levelLogic(player);
 		
 		deathLogic(player);
 		
@@ -104,6 +105,7 @@ public class Model {
 		
 	}
 	
+	/*
 	//Changes levels when player reaches a power up
 	private void levelLogic() {
 		if(touchingCheckpoint((int)Player.getCentre().getX(), (int)Player.getCentre().getY())) {
@@ -131,7 +133,43 @@ public class Model {
 			}
 			Player.setScore(+1);
 			
-		}
+		}*/
+		
+		//Changes levels when player reaches a power up
+		private void levelLogic(Player player) {
+			if(touchingCheckpoint((int)player.getCentre().getX(), (int)player.getCentre().getY())) {
+				level++;
+				switch(level) {
+					case 2:
+						currentLevel = new Level2();
+						break;
+					case 3:
+						currentLevel = new Level3();
+						break;
+					case 4:
+						currentLevel = new Level4();
+						break;
+					case 5:
+						currentLevel = new Level5();
+						break;
+					case 6:
+						currentLevel = new Level6();
+						break;
+					case 7:
+						currentLevel = new Level7();
+						break;
+					case 8:
+						currentLevel = new Level8();
+						break;
+				}
+				Player.setCentre(new Point3f(50,300,0));
+				if(multiplayer) {
+					Player2.setCentre(new Point3f(100,300,0));
+					Player.setDown(false);
+					Player2.setDown(false);
+				}
+				Player.setScore(Player.getScore() + 1);
+			}
 
 		if(level == 5) {
 			for(MovingPlatform movingPlatform : currentLevel.getMovingPlatforms()) {
@@ -153,14 +191,34 @@ public class Model {
 			if(!multiplayer) {
 				player.setCentre(new Point3f(100,300,0));
 			}else {
-				Player.setCentre(new Point3f(50,300,0));
-				Player2.setCentre(new Point3f(100,300,0));
+				multiplayerDeathLogic(player);
 			}
 			if(player.isPowerUp()) {
 				player.powerDown();
 			}
 		}
 	}
+	
+	
+	//if multiplayer, remove the player that dies until the second player dies or reaches the checkpoint
+	private void multiplayerDeathLogic(Player player) {
+		if((int) player.getCentre().getY() > frameHeight) {
+			player.setDown(true);
+			//if both players are down, remove a life and respawn both
+			if(getOtherPlayer(player).isDown()) {
+				player.setLives(Player.getLives()-1);
+				Player.setCentre(new Point3f(50,300,0));
+				Player2.setCentre(new Point3f(100,300,0));
+				Player.setDown(false);
+				Player2.setDown(false);
+			}
+			
+			
+		}
+	}
+	
+	
+	
 
 	private void playerLogic(Player player) {
 		
@@ -171,7 +229,7 @@ public class Model {
 		//check for movement and if you fired a bullet 
 		
 		//Collision detection gravity
-		if(!platformCollision(playerX, playerY, player) || (!platformCollision(playerX, playerY, player) && player.getJumpTimer() == 0)) {
+		if(!platformCollision(playerX + (player.getWidth()/16), playerY, player) || (!platformCollision(playerX + (player.getWidth()/16), playerY, player) && player.getJumpTimer() == 0)) {
 			player.getCentre().ApplyVector( new Vector3f(0,-player.getSpeed(),0));
 		}else {
 			//create increment && derement methods
@@ -265,12 +323,15 @@ public class Model {
 		    player.setTexture("res/dog_sitting.png");
 		}
 	}
-	
-	private void CreateBullet() {
-		BulletList.add(new GameObject("res/Guinness_transparent.png",32,64,new Point3f(Player.getCentre().getX(),Player.getCentre().getY(),0.0f)));
-	}
 
 	public Player getPlayer() {
+		return Player;
+	}
+	
+	public Player getOtherPlayer(Player player) {
+		if(player.getID() == 2) {
+			return Player2;
+		}
 		return Player;
 	}
 	
@@ -338,14 +399,6 @@ public class Model {
 		
 	}
 
-	public CopyOnWriteArrayList<GameObject> getEnemies() {
-		return EnemiesList;
-	}
-	
-	public CopyOnWriteArrayList<GameObject> getBullets() {
-		return BulletList;
-	}
-
 	public int getScore() { 
 		return Player.getScore();
 	}
@@ -369,7 +422,6 @@ public class Model {
 		currentLevel = new Level1();
 	}
  
-
 }
 
 

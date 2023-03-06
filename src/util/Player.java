@@ -14,21 +14,23 @@ public class Player extends GameObject{
 	private int height = 45;
 	private boolean powerUp = false;
 	private int speed = 2;
+	private int id;
 	
 	private Point3f centre = new Point3f(0,0,0);
 	private boolean hasTextured = false;
 	private String textureLocation; 
 	private String blanktexture="res/blankSprite.png";
 	
+	private boolean down = false;
+	
 	public Player(String textureLocation, Point3f centre) {
-		//super();
 		hasTextured=true;
    	 	this.textureLocation = textureLocation;
 		this.centre = centre;
 	}
 	
-	public Player(String textureLocation, Point3f centre, int width, int height) {
-		//super();
+	public Player(int id, String textureLocation, Point3f centre, int width, int height) {
+		this.id = id;
 		hasTextured=true;
    	 	this.textureLocation = textureLocation;
 		this.centre = centre;
@@ -55,6 +57,18 @@ public class Player extends GameObject{
 	
 	public void draw(int x, int y, int width, int height, String texture,Graphics g) {
 		super.draw(x, y, width, height, texture, g);
+	}
+	
+	public void setDown(boolean down) {
+		this.down = down;
+	}
+	
+	public boolean isDown() {
+		return down;
+	}
+	
+	public int getID() {
+		return id;
 	}
 	
 	public Point3f getCentre() {
